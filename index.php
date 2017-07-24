@@ -117,8 +117,14 @@ class D_app_file extends D_app_core
                 }
                 foreach ($rowData as $cellData) {
                     $cellData = explode(PHP_EOL, trim($cellData));
-                    $cellData = array_filter($cellData, function ($value) {return !empty(trim($value));});
+                    $cellData = array_filter($cellData, function ($value) {
+                        return trim($value) !== '';
+                    });
                     $cellData = implode(', ', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F]/', '', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F]/u', '', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $cellData);
                     $cellData = nl2br($cellData);
 
                     if ($this->isDownload()) {
@@ -133,7 +139,7 @@ class D_app_file extends D_app_core
                 }
 
                 if ($this->isDownload()) {
-                    $this->file_write(PHP_EOL);
+                    $this->file_write("\r\n");
                 } else {
                     echo '</tr>';
                 }
