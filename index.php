@@ -109,9 +109,7 @@ class D_app_file extends D_app_core
                 true,
                 false);
             foreach ($rowsData as $rowData) {
-                if (!$this->isDownload()) {
-                    echo '<tr>';
-                }
+                echo '<tr>';
                 foreach ($rowData as $cellData) {
                     $cellData = explode(PHP_EOL, trim($cellData));
                     $cellData = array_filter($cellData, function ($value) {
