@@ -31,12 +31,15 @@
                                 </small>
                             </td>
                             <td>
-                                <a href="?file=<?php echo $filename; ?>&download=1" class="btn btn-success btn-xs" target="_blank">
-                                    <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
-                                </a>
-                                <a href="?file=<?php echo $filename; ?>&delete=1" class="btn btn-danger btn-xs">
-                                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                                </a>
+                                <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                                    <input type="hidden" name="file" value="<?php echo $filename; ?>">
+                                    <button type="submit" name="download" value="1" class="btn btn-success btn-xs">
+                                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                                    </button>
+                                    <button type="submit" name="delete" value="1" class="btn btn-danger btn-xs">
+                                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                    </button>
+                                </form>
                             </td>
                         </tr>
                         <?php endforeach; ?>
