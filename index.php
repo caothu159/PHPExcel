@@ -256,10 +256,13 @@ class D_app extends D_app_file
     public function __construct()
     {
         parent::__construct();
-        if (!$this->download) {
+        if (!$this->isDownload() && !$this->isDelete()) {
             $this->load('html/html.phtml');
-        } else if ($this->file) {
-            $this->_content();
+        }
+
+
+        if ($this->isDownload()) {
+            $this->file_download();
         }
     }
 
