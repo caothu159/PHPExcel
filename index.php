@@ -102,11 +102,7 @@ class D_app_file extends D_app_core
         $highestColumn = $sheet->getHighestColumn();
         $hasHeader     = false;
 
-        if ($this->isDownload()) {
-            $this->file_open();
-        } else {
-            echo '<table class="table table-hover table-condensed" style="white-space: nowrap;">';
-        }
+        echo '<table class="table table-hover table-condensed" style="white-space: nowrap;">';
         for ($row = 1; $row <= $highestRow; $row++) {
             $rowsData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
                 null,
@@ -128,34 +124,21 @@ class D_app_file extends D_app_core
                     $cellData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $cellData);
                     $cellData = nl2br($cellData);
 
-                    if ($this->isDownload()) {
-                        $this->file_write(sprintf("%s\t", $cellData));
+                    if (!$hasHeader) {
+                        printf('<th><small>%s</small></th>', $cellData);
                     } else {
-                        if (!$hasHeader) {
-                            printf('<th><small>%s</small></th>', $cellData);
-                        } else {
-                            echo sprintf('<td><small>%s</small></td>', $cellData);
-                        }
+                        echo sprintf('<td><small>%s</small></td>', $cellData);
                     }
                 }
 
-                if ($this->isDownload()) {
-                    $this->file_write("\r\n");
-                } else {
-                    echo '</tr>';
-                }
+                echo '</tr>';
                 if (!$hasHeader) {
                     $hasHeader = true;
                 }
             }
         }
 
-        if ($this->isDownload()) {
-            $this->file_close();
-            $this->file_download();
-        } else {
-            echo '</table>';
-        }
+        echo '</table>';
         return $_content;
     }
 
