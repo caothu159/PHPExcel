@@ -88,6 +88,7 @@ class D_app_file extends D_app_core
                 unlink($target_name);
             }
             move_uploaded_file($target_file, $target_name);
+            header('Location: ' . $_SERVER['PHP_SELF']);
         }
     }
 
