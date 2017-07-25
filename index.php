@@ -151,6 +151,11 @@ class D_app_file extends D_app_core
         return $this->download == 1 || $this->download == '1';
     }
 
+    public function isDelete()
+    {
+        return $this->delete == 1 || $this->delete == '1';
+    }
+
     public function file_open()
     {
         $this->handle = fopen($this->file_text, 'w');
@@ -217,13 +222,24 @@ class D_app_file extends D_app_core
         exit;
     }
 
-    public function file_delete($path = '')
+    public function file_delete()
+    {
+        if (is_file($this->file_text)) {
+            $this->_file_delete($this->file_text);
+        }
+        if (is_file($this->file)) {
+            $this->_file_delete($this->file);
+        }
+        header('Location: ' . $_SERVER['PHP_SELF']);
+    }
+
+    protected function _file_delete($path = '')
     {
         if (is_dir($path) === true) {
             $files = array_diff(scandir($path), array('.', '..'));
 
             foreach ($files as $file) {
-                $this->file_delete(realpath($path) . DIRECTORY_SEPARATOR . $file);
+                $this->_file_delete(realpath($path) . DIRECTORY_SEPARATOR . $file);
             }
 
             return rmdir($path);
@@ -291,6 +307,9 @@ class D_app extends D_app_file
             $this->load('html/html.phtml');
         }
 
+        if ($this->isDelete()) {
+            $this->file_delete();
+        }
 
         if ($this->isDownload()) {
             $this->file_download();
