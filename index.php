@@ -176,19 +176,45 @@ class D_app_file extends D_app_core
 
     public function file_download()
     {
-        if (is_file($this->file_text)) {
-            $this->sendHeaders($this->file_text, mime_content_type($this->file_text));
-            $chunkSize = 1024 * 1024;
-            $handle    = fopen($this->file_text, 'rb');
-            while (!feof($handle)) {
-                $buffer = fread($handle, $chunkSize);
-                echo $buffer;
+        ob_start();
+        $this->sendHeaders($this->file_text);
+
+        $objPHPExcel = PHPExcel_IOFactory::load($this->file);
+
+        $sheet         = $objPHPExcel->getActiveSheet();
+        $highestRow    = $sheet->getHighestRow();
+        $highestColumn = $sheet->getHighestColumn();
+        $hasHeader     = false;
+
+        for ($row = 1; $row <= $highestRow; $row++) {
+            $rowsData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
+                null,
+                true,
+                false);
+            foreach ($rowsData as $rowData) {
+                foreach ($rowData as $cellData) {
+                    $cellData = explode(PHP_EOL, trim($cellData));
+                    $cellData = array_filter($cellData, function ($value) {
+                        return trim($value) !== '';
+                    });
+                    $cellData = implode(', ', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F]/', '', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F]/u', '', $cellData);
+                    $cellData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $cellData);
+                    $cellData = nl2br($cellData);
+
+                    echo (sprintf("%s\t", $cellData));
+                    ob_flush();
+                    flush();
+                }
+
+                echo ("\r\n");
                 ob_flush();
                 flush();
             }
-            fclose($handle);
-            exit;
         }
+        exit;
     }
 
     public function file_delete($path = '')
