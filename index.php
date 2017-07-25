@@ -234,19 +234,50 @@ class D_app_file extends D_app_core
         return false;
     }
 
-    public function sendHeaders($file, $type, $name = null)
+    public function files($dir, $ignored = array('.', '..'))
     {
-        if (empty($name)) {
-            $name = basename($file);
+        $files = array();
+        foreach (array_diff(scandir($dir), $ignored) as $file) {
+            $files[$file] = filemtime($dir . DIRECTORY_SEPARATOR . $file);
         }
+
+        arsort($files);
+        $files = array_keys($files);
+        foreach ($files as $key => $file) {
+            $files[$key] = $dir . DIRECTORY_SEPARATOR . $file;
+        }
+
+        return ($files) ? $files : array();
+    }
+
+    public function formatSizeUnits($bytes)
+    {
+        if ($bytes >= 1073741824) {
+            $bytes = number_format($bytes / 1073741824, 2) . ' GB';
+        } elseif ($bytes >= 1048576) {
+            $bytes = number_format($bytes / 1048576, 2) . ' MB';
+        } elseif ($bytes >= 1024) {
+            $bytes = number_format($bytes / 1024, 2) . ' KB';
+        } elseif ($bytes > 1) {
+            $bytes = $bytes . ' bytes';
+        } elseif ($bytes == 1) {
+            $bytes = $bytes . ' byte';
+        } else {
+            $bytes = '0 bytes';
+        }
+
+        return $bytes;
+    }
+
+    public function sendHeaders($file)
+    {
         header('Pragma: public');
         header('Expires: 0');
         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
         header('Cache-Control: private', false);
         header('Content-Transfer-Encoding: binary');
-        header('Content-Disposition: attachment; filename="' . $name . '";');
-        header('Content-Type: ' . $type);
-        header('Content-Length: ' . filesize($file));
+        header('Content-Disposition: attachment; filename="' . basename($file) . '";');
+        header('Content-Type: text/plain');
     }
 }
 
