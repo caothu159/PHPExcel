@@ -94,54 +94,77 @@ class D_app_file extends D_app_core
 
     public function _content()
     {
-        $_content    = '';
-        $objPHPExcel = PHPExcel_IOFactory::load($this->file);
-
+        $objPHPExcel   = PHPExcel_IOFactory::load($this->file);
         $sheet         = $objPHPExcel->getActiveSheet();
         $highestRow    = $sheet->getHighestRow();
-        $highestColumn = $sheet->getHighestColumn();
-        $hasHeader     = false;
+        $highestColumn = $this->_getHighestColumn($sheet);
+        $isHeader      = true;
+        $_content      = '';
 
-        echo '<table class="table table-hover table-condensed" style="white-space: nowrap;">';
+        $_content = '<table class="table table-hover table-condensed" style="white-space: nowrap;">';
         for ($row = 1; $row <= $highestRow; $row++) {
             $rowsData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
                 null,
                 true,
-                false);
+                false,
+                true);
             foreach ($rowsData as $rowData) {
-                echo '<tr>';
-                foreach ($rowData as $cellData) {
-                    $cellData = explode(PHP_EOL, trim($cellData));
-                    $cellData = array_filter($cellData, function ($value) {
-                        return trim($value) !== '';
-                    });
-                    $cellData = implode(', ', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F]/', '', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F]/u', '', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $cellData);
-                    $cellData = nl2br($cellData);
+                $_content .= '<tr>';
+                foreach ($rowData as $cellRef => $cellData) {
+                    $cellData = $this->_contentRepair($cellData);
 
-                    if (!$hasHeader) {
-                        printf('<th><small>%s</small></th>', $cellData);
+                    if (!$isHeader) {
+                        $_content .= sprintf('<td><small>%s</small></td>', $cellData);
                     } else {
-                        echo sprintf('<td><small>%s</small></td>', $cellData);
+                        $_content .= sprintf('<th><small>[%s]%s</small></th>', $cellRef, $cellData);
                     }
                 }
 
-                echo '</tr>';
-                if (!$hasHeader) {
-                    $hasHeader = true;
+                $_content .= '</tr>';
+                if ($isHeader) {
+                    $isHeader = false;
                 }
             }
         }
 
-        echo '</table>';
+        $_content .= '</table>';
         return $_content;
+    }
+
+    protected function _getHighestColumn($sheet)
+    {
+        $highestColumn = $sheet->getHighestColumn();
+        $headerRow     = 1;
+        $rowsData      = $sheet->rangeToArray('A' . $headerRow . ':' . $highestColumn . $headerRow,
+            null,
+            true,
+            false,
+            true);
+        foreach ($rowsData as $rowData) {
+            foreach ($rowData as $cellRef => $cellData) {
+                $cellData = $this->_contentRepair($cellData);
+                if (empty($cellData) ||
+                    is_null($cellData) ||
+                    $cellData == '') {
+                    continue;
+                }
+                $highestColumn = $cellRef;
+            }
+        }
+        return $highestColumn;
     }
 
     public function _contentRepair($content = '')
     {
+        $content = explode(PHP_EOL, trim($content));
+        $content = array_filter($content, function ($value) {
+            return trim($value) !== '';
+        });
+        $content = implode(', ', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F]/', '', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F]/u', '', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $content);
         $content = nl2br($content);
         return $content;
     }
@@ -188,8 +211,7 @@ class D_app_file extends D_app_core
 
         $sheet         = $objPHPExcel->getActiveSheet();
         $highestRow    = $sheet->getHighestRow();
-        $highestColumn = $sheet->getHighestColumn();
-        $hasHeader     = false;
+        $highestColumn = $this->_getHighestColumn($sheet);
 
         for ($row = 1; $row <= $highestRow; $row++) {
             $rowsData = $sheet->rangeToArray('A' . $row . ':' . $highestColumn . $row,
@@ -197,6 +219,7 @@ class D_app_file extends D_app_core
                 true,
                 false);
             foreach ($rowsData as $rowData) {
+                $_rowContent = array();
                 foreach ($rowData as $cellData) {
                     $cellData = explode(PHP_EOL, trim($cellData));
                     $cellData = array_filter($cellData, function ($value) {
@@ -209,17 +232,20 @@ class D_app_file extends D_app_core
                     $cellData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $cellData);
                     $cellData = nl2br($cellData);
 
-                    echo (sprintf("%s\t", $cellData));
-                    ob_flush();
-                    flush();
+                    array_push($_rowContent, $cellData);
                 }
-
-                echo ("\r\n");
-                ob_flush();
-                flush();
+                $_rowContent = implode("\t", $_rowContent);
+                $this->_file_download(sprintf("%s\r\n", $_rowContent));
             }
         }
         exit;
+    }
+
+    protected function _file_download($content)
+    {
+        echo $content;
+        ob_flush();
+        flush();
     }
 
     public function file_delete()
@@ -321,7 +347,7 @@ class D_app extends D_app_file
         $this->load('html/title.phtml');
         $this->load('html/files.phtml');
         if ($this->file) {
-            $this->_content();
+            echo $this->_content();
         }
     }
 
