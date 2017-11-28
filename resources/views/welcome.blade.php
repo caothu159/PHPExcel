@@ -5,91 +5,91 @@
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title>Laravel</title>
+        <title>{{ config('app.name') }}</title>
 
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Raleway:100,600" rel="stylesheet" type="text/css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.css">
 
         <!-- Styles -->
-        <style>
-            html, body {
-                background-color: #fff;
-                color: #636b6f;
-                font-family: 'Raleway', sans-serif;
-                font-weight: 100;
-                height: 100vh;
-                margin: 0;
-            }
-
-            .full-height {
-                height: 100vh;
-            }
-
-            .flex-center {
-                align-items: center;
-                display: flex;
-                justify-content: center;
-            }
-
-            .position-ref {
-                position: relative;
-            }
-
-            .top-right {
-                position: absolute;
-                right: 10px;
-                top: 18px;
-            }
-
-            .content {
-                text-align: center;
-            }
-
-            .title {
-                font-size: 84px;
-            }
-
-            .links > a {
-                color: #636b6f;
-                padding: 0 25px;
-                font-size: 12px;
-                font-weight: 600;
-                letter-spacing: .1rem;
-                text-decoration: none;
-                text-transform: uppercase;
-            }
-
-            .m-b-md {
-                margin-bottom: 30px;
-            }
-        </style>
     </head>
     <body>
-        <div class="flex-center position-ref full-height">
-            @if (Route::has('login'))
-                <div class="top-right links">
-                    @auth
-                        <a href="{{ url('/home') }}">Home</a>
-                    @else
-                        <a href="{{ route('login') }}">Login</a>
-                        <a href="{{ route('register') }}">Register</a>
-                    @endauth
-                </div>
-            @endif
-
-            <div class="content">
-                <div class="title m-b-md">
-                    Laravel
-                </div>
-
-                <div class="links">
-                    <a href="https://laravel.com/docs">Documentation</a>
-                    <a href="https://laracasts.com">Laracasts</a>
-                    <a href="https://laravel-news.com">News</a>
-                    <a href="https://forge.laravel.com">Forge</a>
-                    <a href="https://github.com/laravel/laravel">GitHub</a>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="page-header">
+                    <h1>
+                        <a href="{{ url('/') }}">Ductn Mozenda</a>
+                    </h1>
                 </div>
             </div>
         </div>
+
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-xs-12 col-sm-8">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">Danh sách file excel trên máy chủ</h3>
+                        </div>
+                        <div class="panel-body">
+                            <table class="table table-hover table-striped table-condensed">
+                                <tr>
+                                    <th>File name</th>
+                                    <th style="text-align: right;">Size</th>
+                                    <th>Last Modified</th>
+                                    <th>Action</th>
+                                </tr>
+                                
+                                <tr>
+                                    <td>
+                                        <a href="">
+                                            abc
+                                        </a>
+                                    </td>
+                                    <td style="text-align: right;">
+                                        <small style="color: #666666;">
+                                            abc
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <small style="color: #666666;">
+                                            abc
+                                        </small>
+                                    </td>
+                                    <td>
+                                        <form action="#" method="post">
+                                            <input type="hidden" name="file" value="test">
+                                            <button type="submit" name="download" value="1" class="btn btn-success btn-xs">
+                                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span>
+                                            </button>
+                                            <button type="submit" name="delete" value="1" class="btn btn-danger btn-xs">
+                                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-12 col-sm-4">
+                    <form class="panel panel-info" method="post" action="" enctype="multipart/form-data">
+                        <div class="panel-heading">
+                            <label class="panel-title" for="exampleInputFile">Tải lên:</label>
+                        </div>
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <input type="file" id="fileToUpload" name="fileToUpload">
+                                <p class="help-block">Chọn file excel để tải lên.</p>
+                            </div>
+                        </div>
+                        <div class="panel-footer">
+                            <button type="submit" name="fileUploaded" value="ok" class="btn btn-default">Tải lên</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>
