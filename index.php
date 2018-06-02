@@ -1,662 +1,315 @@
 <?php
-
-error_reporting(E_ALL | E_STRICT);
-ini_set('display_startup_errors', 1);
-ini_set('display_errors', 1);
-ini_set('html_errors', 1);
-ini_set('memory_limit', -1);
-date_default_timezone_set('Asia/Ho_Chi_Minh');
-
-require_once dirname(__FILE__).'/Classes/PHPExcel/IOFactory.php';
-
 /**
- * Class stdObject
+ * CodeIgniter
+ *
+ * An open source application development framework for PHP
+ *
+ * This content is released under the MIT License (MIT)
+ *
+ * Copyright (c) 2014 - 2018, British Columbia Institute of Technology
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in
+ * all copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+ * THE SOFTWARE.
+ *
+ * @package	CodeIgniter
+ * @author	EllisLab Dev Team
+ * @copyright	Copyright (c) 2008 - 2014, EllisLab, Inc. (https://ellislab.com/)
+ * @copyright	Copyright (c) 2014 - 2018, British Columbia Institute of Technology (http://bcit.ca/)
+ * @license	http://opensource.org/licenses/MIT	MIT License
+ * @link	https://codeigniter.com
+ * @since	Version 1.0.0
+ * @filesource
  */
-class stdObject extends StdClass
+
+/*
+ *---------------------------------------------------------------
+ * APPLICATION ENVIRONMENT
+ *---------------------------------------------------------------
+ *
+ * You can load different configurations depending on your
+ * current environment. Setting the environment also influences
+ * things like logging and error reporting.
+ *
+ * This can be set to anything, but default usage is:
+ *
+ *     development
+ *     testing
+ *     production
+ *
+ * NOTE: If you change these, also change the error_reporting() code below
+ */
+	define('ENVIRONMENT', isset($_SERVER['CI_ENV']) ? $_SERVER['CI_ENV'] : 'development');
+
+/*
+ *---------------------------------------------------------------
+ * ERROR REPORTING
+ *---------------------------------------------------------------
+ *
+ * Different environments will require different levels of error reporting.
+ * By default development will show errors but testing and live will hide them.
+ */
+switch (ENVIRONMENT)
 {
+	case 'development':
+		error_reporting(-1);
+		ini_set('display_errors', 1);
+	break;
+
+	case 'testing':
+	case 'production':
+		ini_set('display_errors', 0);
+		if (version_compare(PHP_VERSION, '5.3', '>='))
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED & ~E_STRICT & ~E_USER_NOTICE & ~E_USER_DEPRECATED);
+		}
+		else
+		{
+			error_reporting(E_ALL & ~E_NOTICE & ~E_STRICT & ~E_USER_NOTICE);
+		}
+	break;
+
+	default:
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'The application environment is not set correctly.';
+		exit(1); // EXIT_ERROR
 }
 
-/**
- * Class D_app_core
+/*
+ *---------------------------------------------------------------
+ * SYSTEM DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * This variable must contain the name of your "system" directory.
+ * Set the path if it is not in the same directory as this file.
  */
-class D_app_core extends stdObject
-{
-    /**
-     * @var array
-     */
-    public $_data = array();
+	$system_path = 'system';
 
-    /**
-     * @param $property
-     *
-     * @return bool|mixed
-     */
-    public function __get($property)
-    {
-        $return = false;
-        if ($property == 'file_title') {
-            $_file_title      = $this->file;
-            $_file_title      = str_replace('Data/', '', $_file_title);
-            $_file_title      = str_replace('.xlsx', '', $_file_title);
-            $this->file_title = $_file_title;
-        }
-        if ($property == 'file_text') {
-            $_file_text      = $this->file;
-            $_file_text      = str_replace('.xlsx', '.txt', $_file_text);
-            $this->file_text = $_file_text;
-        }
-        if (isset($this->_data[$property])) {
-            $return = $this->_data[$property];
-        }
-        if (filter_input(INPUT_POST, $property)) {
-            $return = filter_input(INPUT_POST, $property);
-        }
-        if (filter_input(INPUT_GET, $property)) {
-            $return = filter_input(INPUT_GET, $property);
-        }
-        if (filter_input(INPUT_SERVER, $property)) {
-            $return = filter_input(INPUT_SERVER, $property);
-        }
-        if ($return) {
-            $_method_valid = "_valid_$property";
-            if (function_exists($_method_valid) || method_exists($this, $_method_valid)) {
-                return $this->{$_method_valid}($return);
-            }
-
-            return $return;
-        }
-
-        return $return;
-    }
-
-    /**
-     * @param $property
-     * @param $argument
-     */
-    public function __set($property, $argument)
-    {
-        try {
-            $this->_data[$property] = $argument;
-        } catch (Exception $e) {
-            printf('<pre>%s</pre>', $e);
-        }
-    }
-
-    /**
-     * @param $key
-     */
-    public function __unset($key)
-    {
-        unset($this->{$key});
-    }
-
-    /**
-     * @param $path
-     *
-     * @return bool
-     */
-    public function _valid_file($path)
-    {
-        if (file_exists($path)) {
-            return $path;
-        }
-
-        return false;
-    }
-
-    /**
-     * @param $arg
-     */
-    protected function debug($arg)
-    {
-        echo '<pre>';
-        print_r($arg);
-        echo '</pre>';
-    }
-}
-
-/**
- * Class D_app_file
+/*
+ *---------------------------------------------------------------
+ * APPLICATION DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want this front controller to use a different "application"
+ * directory than the default one you can set its name here. The directory
+ * can also be renamed or relocated anywhere on your server. If you do,
+ * use an absolute (full) server path.
+ * For more info please see the user guide:
+ *
+ * https://codeigniter.com/user_guide/general/managing_apps.html
+ *
+ * NO TRAILING SLASH!
  */
-class D_app_file extends D_app_core
-{
-    public $length = 1024;
-    public $line   = 5;
+	$application_folder = 'application';
 
-    /**
-     * D_app_file constructor.
-     */
-    public function __construct()
-    {
-        if ($this->fileUploaded == 'ok' && $_FILES['fileToUpload']['name'] != null) {
-
-            $target_dir = 'Data/';
-            if (!file_exists($target_dir)) {
-                mkdir($target_dir, 0777, true);
-            }
-
-            $target_file = $_FILES['fileToUpload']['tmp_name'];
-            $target_name = $target_dir.basename($_FILES['fileToUpload']['name']);
-
-            if (file_exists($target_name)) {
-                unlink($target_name);
-            }
-            move_uploaded_file($target_file, $target_name);
-            header('Location: '.$_SERVER['PHP_SELF']);
-        }
-    }
-
-    /**
-     * @return string
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function _content()
-    {
-        $objPHPExcel   = PHPExcel_IOFactory::load($this->file);
-        $sheet         = $objPHPExcel->getActiveSheet();
-        $highestRow    = $sheet->getHighestRow();
-        $highestColumn = $this->_getHighestColumn($sheet);
-        $isHeader      = true;
-        $_content      = '';
-
-        $_content = '<table class="table table-hover table-condensed" style="white-space: nowrap;">';
-        for ($row = 1; $row <= $highestRow; $row++) {
-            $rowsData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,
-                                             null,
-                                             true,
-                                             false,
-                                             true);
-            foreach ($rowsData as $rowData) {
-                $_content .= '<tr>';
-                foreach ($rowData as $cellRef => $cellData) {
-                    $cellData = $this->_contentRepair($cellData);
-
-                    if (!$isHeader) {
-                        $_content .= sprintf('<td><small>%s</small></td>', $cellData);
-                    } else {
-                        $_content .= sprintf('<th><small>[%s]%s</small></th>', $cellRef, $cellData);
-                    }
-                }
-
-                $_content .= '</tr>';
-                if ($isHeader) {
-                    $isHeader = false;
-                }
-            }
-        }
-
-        $_content .= '</table>';
-
-        return $_content;
-    }
-
-    /**
-     * @param $file
-     *
-     * @return array
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    protected function fileContent($file)
-    {
-        $excel      = PHPExcel_IOFactory::load($file);
-        $sheet      = $excel->getActiveSheet();
-        $highestRow = $sheet->getHighestRow();
-        $isHeader   = true;
-        $content    = array();
-        $cols       = array();
-
-        for ($row = 1; $row <= $highestRow; $row++) {
-
-            $rowData = $this->rowContent($sheet, $row);
-            foreach ($rowData as $cells) {
-
-                foreach ($cells as $cellRef => $cellData) {
-                    if ($cellRef == 'A') {
-                        continue;
-                    }
-                    $cellData = $this->_contentRepair($cellData);
-
-                    if (!$isHeader) {
-                        $content[$cells['A']][$cols[$cellRef]] = $cellData;
-                    } else {
-                        $cols[$cellRef] = $cellData;
-                    }
-                }
-
-                $isHeader = false;
-            }
-        }
-
-        return $content;
-    }
-
-    /**
-     * @param $sheet
-     * @param $row
-     *
-     * @return mixed
-     */
-    protected function rowContent($sheet, $row)
-    {
-        $highestColumn = $this->_getHighestColumn($sheet);
-
-        return $sheet->rangeToArray(
-            'A'.$row.':'.$highestColumn.$row,
-            null,
-            true,
-            false,
-            true
-        );
-    }
-
-    /**
-     * @param $sheet
-     *
-     * @return int|string
-     */
-    protected function _getHighestColumn($sheet)
-    {
-        $highestColumn = $sheet->getHighestColumn();
-        $headerRow     = 1;
-        $rowsData      = $sheet->rangeToArray('A'.$headerRow.':'.$highestColumn.$headerRow,
-                                              null,
-                                              true,
-                                              false,
-                                              true);
-        foreach ($rowsData as $rowData) {
-            foreach ($rowData as $cellRef => $cellData) {
-                $cellData = $this->_contentRepair($cellData);
-                if (empty($cellData)
-                    || is_null($cellData)
-                    || $cellData == ''
-                ) {
-                    continue;
-                }
-                $highestColumn = $cellRef;
-            }
-        }
-
-        return $highestColumn;
-    }
-
-    /**
-     * @param string $content
-     *
-     * @return array|null|string|string[]
-     */
-    public function _contentRepair($content = '')
-    {
-        $content = explode(PHP_EOL, trim($content));
-        $content = array_filter($content, function ($value) {
-            return trim($value) !== '';
-        });
-        $content = implode(', ', $content);
-        $content = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $content);
-        $content = preg_replace('/[\x00-\x1F\x7F]/', '', $content);
-        $content = preg_replace('/[\x00-\x1F\x7F]/u', '', $content);
-        $content = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $content);
-        $content = nl2br($content);
-
-        return $content;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDownload()
-    {
-        return $this->download == 1 || $this->download == '1';
-    }
-
-    /**
-     * @return bool
-     */
-    public function isDelete()
-    {
-        return $this->delete == 1 || $this->delete == '1';
-    }
-
-    /**
-     *
-     */
-    public function file_open()
-    {
-        $this->handle = fopen($this->file_text, 'w');
-        stream_set_blocking($this->handle, 0);
-        ob_start();
-    }
-
-    /**
-     * @param string $buffer
-     */
-    public function file_write($buffer = '')
-    {
-        usleep(50);
-        if (flock($this->handle, LOCK_EX)) {
-            fwrite($this->handle, $buffer);
-        }
-        flock($this->handle, LOCK_UN);
-
-        return;
-    }
-
-    /**
-     *
-     */
-    public function file_close()
-    {
-        $this->file_write(ob_get_clean());
-        fclose($this->handle);
-    }
-
-    /**
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function file_download()
-    {
-        ob_start();
-        $this->sendHeaders($this->file_text);
-
-        $objPHPExcel = PHPExcel_IOFactory::load($this->file);
-
-        $sheet         = $objPHPExcel->getActiveSheet();
-        $highestRow    = $sheet->getHighestRow();
-        $highestColumn = $this->_getHighestColumn($sheet);
-
-        for ($row = 1; $row <= $highestRow; $row++) {
-            $rowsData = $sheet->rangeToArray('A'.$row.':'.$highestColumn.$row,
-                                             null,
-                                             true,
-                                             false);
-            foreach ($rowsData as $rowData) {
-                $_rowContent = array();
-                foreach ($rowData as $cellData) {
-                    $cellData = explode(PHP_EOL, trim($cellData));
-                    $cellData = array_filter($cellData, function ($value) {
-                        return trim($value) !== '';
-                    });
-                    $cellData = implode(', ', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F]/', '', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F]/u', '', $cellData);
-                    $cellData = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $cellData);
-                    $cellData = nl2br($cellData);
-
-                    array_push($_rowContent, $cellData);
-                }
-                $_rowContent = implode("\t", $_rowContent);
-                $this->_file_download(sprintf("%s\r\n", $_rowContent));
-            }
-        }
-        exit;
-    }
-
-    /**
-     * @param $content
-     */
-    protected function _file_download($content)
-    {
-        echo $content;
-        ob_flush();
-        flush();
-    }
-
-    /**
-     *
-     */
-    public function file_delete()
-    {
-        if (is_file($this->file_text)) {
-            $this->_file_delete($this->file_text);
-        }
-        if (is_file($this->file)) {
-            $this->_file_delete($this->file);
-        }
-        header('Location: '.$_SERVER['PHP_SELF']);
-    }
-
-    /**
-     * @param string $path
-     *
-     * @return bool
-     */
-    protected function _file_delete($path = '')
-    {
-        if (is_dir($path) === true) {
-            $files = array_diff(scandir($path), array('.', '..'));
-
-            foreach ($files as $file) {
-                $this->_file_delete(realpath($path).DIRECTORY_SEPARATOR.$file);
-            }
-
-            return rmdir($path);
-        } else {
-            if (is_file($path) === true) {
-                return unlink($path);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param       $dir
-     * @param array $ignored
-     *
-     * @return array
-     */
-    public function files($dir, $ignored = array('.', '..'))
-    {
-        $files = array();
-        foreach (array_diff(scandir($dir), $ignored) as $file) {
-            $files[$file] = filemtime($dir.DIRECTORY_SEPARATOR.$file);
-        }
-
-        arsort($files);
-        $files = array_keys($files);
-        foreach ($files as $key => $file) {
-            $files[$key] = $dir.DIRECTORY_SEPARATOR.$file;
-        }
-
-        return ($files) ? $files : array();
-    }
-
-    /**
-     * @param $bytes
-     *
-     * @return string
-     */
-    public function formatSizeUnits($bytes)
-    {
-        if ($bytes >= 1073741824) {
-            $bytes = number_format($bytes / 1073741824, 2).' GB';
-        } elseif ($bytes >= 1048576) {
-            $bytes = number_format($bytes / 1048576, 2).' MB';
-        } elseif ($bytes >= 1024) {
-            $bytes = number_format($bytes / 1024, 2).' KB';
-        } elseif ($bytes > 1) {
-            $bytes = $bytes.' bytes';
-        } elseif ($bytes == 1) {
-            $bytes = $bytes.' byte';
-        } else {
-            $bytes = '0 bytes';
-        }
-
-        return $bytes;
-    }
-
-    /**
-     * @param $file
-     */
-    public function sendHeaders($file)
-    {
-        header('Pragma: public');
-        header('Expires: 0');
-        header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-        header('Cache-Control: private', false);
-        header('Content-Transfer-Encoding: binary');
-        header('Content-Disposition: attachment; filename="'.basename($file).'";');
-        header('Content-Type: text/plain');
-    }
-}
-
-/**
- * Class DappSalary
+/*
+ *---------------------------------------------------------------
+ * VIEW DIRECTORY NAME
+ *---------------------------------------------------------------
+ *
+ * If you want to move the view directory out of the application
+ * directory, set the path to it here. The directory can be renamed
+ * and relocated anywhere on your server. If blank, it will default
+ * to the standard location inside your application directory.
+ * If you do move this, use an absolute (full) server path.
+ *
+ * NO TRAILING SLASH!
  */
-class DappSalary extends D_app_file
-{
-    protected $nangsuat = array();
-    protected $chamcong = array();
-    protected $phancong = array();
-    protected $nhanvien = array();
+	$view_folder = '';
 
-    /**
-     * DappSalary constructor.
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function __construct()
-    {
-        $this->nangsuat = $this->nangsuat();
-        $this->chamcong = $this->chamcong();
-        $this->phancong = $this->phancong();
-        $this->nhanvien = $this->nhanvien();
-    }
 
-    /**
-     *
-     */
-    protected function salary()
-    {
-        foreach ($this->chamcong as $time => $chamcong) {
-
-            $unixTime = ($time - 25569) * 86400;
-
-            echo date('d/m/Y', $unixTime);
-        }
-
-        $this->debug($this->nhanvien);
-
-        $this->debug($this->chamcong);
-        $this->debug($this->phancong);
-        $this->debug($this->nangsuat);
-    }
-
-    /**
-     *
-     */
-    public function salaryHtml()
-    {
-        return $this->salary();
-    }
-
-    /**
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    private function nangsuat()
-    {
-        return $this->fileContent($this->getDir('nangsuat.xlsx'));
-    }
-
-    /**
-     * @return array
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    private function chamcong()
-    {
-        return $this->fileContent($this->getDir('chamcong.xlsx'));
-    }
-
-    /**
-     * @return array
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    private function phancong()
-    {
-        return $this->fileContent($this->getDir('phancong.xlsx'));
-    }
-
-    /**
-     * @return array
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    private function nhanvien()
-    {
-        return $this->fileContent($this->getDir('nhanvien.xlsx'));
-    }
-
-    /**
-     * @param string $file
-     *
-     * @return string
-     */
-    private function getDir($file = '')
-    {
-        return 'Data'.DIRECTORY_SEPARATOR.$this->time.DIRECTORY_SEPARATOR.$file;
-    }
-}
-
-/**
- * Class D_app
+/*
+ * --------------------------------------------------------------------
+ * DEFAULT CONTROLLER
+ * --------------------------------------------------------------------
+ *
+ * Normally you will set your default controller in the routes.php file.
+ * You can, however, force a custom routing by hard-coding a
+ * specific controller class/function here. For most applications, you
+ * WILL NOT set your routing here, but it's an option for those
+ * special instances where you might want to override the standard
+ * routing in a specific front controller that shares a common CI installation.
+ *
+ * IMPORTANT: If you set the routing here, NO OTHER controller will be
+ * callable. In essence, this preference limits your application to ONE
+ * specific controller. Leave the function name blank if you need
+ * to call functions dynamically via the URI.
+ *
+ * Un-comment the $routing array below to use this feature
  */
-class Dapp extends DappSalary
-{
-    protected $request;
+	// The directory name, relative to the "controllers" directory.  Leave blank
+	// if your controller is not in a sub-directory within the "controllers" one
+	// $routing['directory'] = '';
 
-    /**
-     * D_app constructor.
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function __construct()
-    {
-        parent::__construct();
-        if (!$this->isDownload() && !$this->isDelete()) {
-            $this->load('html/html.phtml');
-        }
+	// The controller class file name.  Example:  mycontroller
+	// $routing['controller'] = '';
 
-        if ($this->isDelete()) {
-            $this->file_delete();
-        }
+	// The controller function you wish to be called.
+	// $routing['function']	= '';
 
-        if ($this->isDownload()) {
-            $this->file_download();
-        }
-    }
 
-    /**
-     * @throws \PHPExcel_Exception
-     * @throws \PHPExcel_Reader_Exception
-     */
-    public function html()
-    {
-        $this->load('html/title.phtml');
-        $this->load('html/files.phtml');
-        if ($this->time) {
-            $this->salaryHtml();
-        }
-    }
+/*
+ * -------------------------------------------------------------------
+ *  CUSTOM CONFIG VALUES
+ * -------------------------------------------------------------------
+ *
+ * The $assign_to_config array below will be passed dynamically to the
+ * config class when initialized. This allows you to set custom config
+ * items or override any default config values found in the config.php file.
+ * This can be handy as it permits you to share one application between
+ * multiple front controller files, with each file containing different
+ * config values.
+ *
+ * Un-comment the $assign_to_config array below to use this feature
+ */
+	// $assign_to_config['name_of_config_item'] = 'value of config item';
 
-    /**
-     * @param string $path
-     */
-    public function load($path = '')
-    {
-        try {
-            if (file_exists($path)) {
-                include $path;
-            }
-        } catch (Exception $e) {
-            printf('<pre>%s</pre>', $e);
-        }
-    }
-}
 
-new Dapp;
+
+// --------------------------------------------------------------------
+// END OF USER CONFIGURABLE SETTINGS.  DO NOT EDIT BELOW THIS LINE
+// --------------------------------------------------------------------
+
+/*
+ * ---------------------------------------------------------------
+ *  Resolve the system path for increased reliability
+ * ---------------------------------------------------------------
+ */
+
+	// Set the current directory correctly for CLI requests
+	if (defined('STDIN'))
+	{
+		chdir(dirname(__FILE__));
+	}
+
+	if (($_temp = realpath($system_path)) !== FALSE)
+	{
+		$system_path = $_temp.DIRECTORY_SEPARATOR;
+	}
+	else
+	{
+		// Ensure there's a trailing slash
+		$system_path = strtr(
+			rtrim($system_path, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		).DIRECTORY_SEPARATOR;
+	}
+
+	// Is the system path correct?
+	if ( ! is_dir($system_path))
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your system folder path does not appear to be set correctly. Please open the following file and correct this: '.pathinfo(__FILE__, PATHINFO_BASENAME);
+		exit(3); // EXIT_CONFIG
+	}
+
+/*
+ * -------------------------------------------------------------------
+ *  Now that we know the path, set the main path constants
+ * -------------------------------------------------------------------
+ */
+	// The name of THIS file
+	define('SELF', pathinfo(__FILE__, PATHINFO_BASENAME));
+
+	// Path to the system directory
+	define('BASEPATH', $system_path);
+
+	// Path to the front controller (this file) directory
+	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
+
+	// Name of the "system" directory
+	define('SYSDIR', basename(BASEPATH));
+
+	// The path to the "application" directory
+	if (is_dir($application_folder))
+	{
+		if (($_temp = realpath($application_folder)) !== FALSE)
+		{
+			$application_folder = $_temp;
+		}
+		else
+		{
+			$application_folder = strtr(
+				rtrim($application_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(BASEPATH.$application_folder.DIRECTORY_SEPARATOR))
+	{
+		$application_folder = BASEPATH.strtr(
+			trim($application_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your application folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('APPPATH', $application_folder.DIRECTORY_SEPARATOR);
+
+	// The path to the "views" directory
+	if ( ! isset($view_folder[0]) && is_dir(APPPATH.'views'.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.'views';
+	}
+	elseif (is_dir($view_folder))
+	{
+		if (($_temp = realpath($view_folder)) !== FALSE)
+		{
+			$view_folder = $_temp;
+		}
+		else
+		{
+			$view_folder = strtr(
+				rtrim($view_folder, '/\\'),
+				'/\\',
+				DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+			);
+		}
+	}
+	elseif (is_dir(APPPATH.$view_folder.DIRECTORY_SEPARATOR))
+	{
+		$view_folder = APPPATH.strtr(
+			trim($view_folder, '/\\'),
+			'/\\',
+			DIRECTORY_SEPARATOR.DIRECTORY_SEPARATOR
+		);
+	}
+	else
+	{
+		header('HTTP/1.1 503 Service Unavailable.', TRUE, 503);
+		echo 'Your view folder path does not appear to be set correctly. Please open the following file and correct this: '.SELF;
+		exit(3); // EXIT_CONFIG
+	}
+
+	define('VIEWPATH', $view_folder.DIRECTORY_SEPARATOR);
+
+/*
+ * --------------------------------------------------------------------
+ * LOAD THE BOOTSTRAP FILE
+ * --------------------------------------------------------------------
+ *
+ * And away we go...
+ */
+require_once BASEPATH.'core/CodeIgniter.php';
