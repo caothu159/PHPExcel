@@ -59,18 +59,19 @@ class Salary extends CI_Controller
 		if (!$time) {
 			return;
 		}
-		$this->data->setTime($time);
-		$this->nhanSu   = $this->data->getNhanSu();
-		$this->nangsuat = $this->data->nangsuat();
-		$this->chamcong = $this->data->chamcong();
-		$this->phancong = $this->data->phancong();
-		$this->load->view('salary');
+		$this->nhanSu = $this->data
+			->setTime($time)
+			->getNhanSu();
 
-		$this->debug($this->nhanSu);
-
-		$this->debug($this->chamcong);
-		$this->debug($this->phancong);
-		$this->debug($this->nangsuat);
+		foreach ($this->nhanSu as $name => $ns) {
+			$ns->setCongNhat($this->data->chamcong())
+			   ->setTuyen($this->data->phancong())
+			   ->setNangSuat($this->data->nangsuat());
+			$this->debug($name);
+			$this->debug($ns->getCongNhat());
+			$this->debug($ns->getNangSuat());
+			$this->debug($ns);
+		}
 	}
 
 	/**

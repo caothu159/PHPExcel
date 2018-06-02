@@ -5,14 +5,125 @@
  */
 class NhanSu extends CI_Model
 {
-	private $name          = '';
-	private $luongCoBan    = 3000;
-	private $nangSuatCoBan = 0.1;
-	private $nangSuatMuc1  = 0.1;
-	private $nangSuatMuc2  = 0.1;
+	/**
+	 * @var string
+	 */
+	private $name = '';
 
-	public function __construct()
+	/**
+	 * @var int
+	 */
+	private $luongCoBan = 3000;
+
+	/**
+	 * @var float
+	 */
+	private $nangSuatCoBan = 0.1;
+
+	/**
+	 * @var float
+	 */
+	private $nangSuatMuc1 = 0.1;
+
+	/**
+	 * @var float
+	 */
+	private $nangSuatMuc2 = 0.1;
+
+	/**
+	 * @var float
+	 */
+	private $cong = 0;
+
+	/**
+	 * @var array
+	 */
+	private $tuyen = array();
+
+	/**
+	 * NhanSu constructor.
+	 *
+	 * @param string|bool $name
+	 * @param array       $data
+	 */
+	public function __construct(
+		$name = false,
+		$data = array()
+	) {
+		if (!$name) {
+			return;
+		}
+		$this->setName($name)
+			 ->setLuongCoBan($data['Luong co ban'])
+			 ->setNangSuatCoBan($data['Nang suat co ban'])
+			 ->setNangSuatMuc1($data['Nang suat muc 1'])
+			 ->setNangSuatMuc2($data['Nang suat muc 2']);
+	}
+
+	/**
+	 * @param array $chamCong
+	 *
+	 * @return $this
+	 */
+	public function setCongNhat($chamCong = array())
 	{
+		foreach ($chamCong as $time => $cong) {
+			if (!isset($cong[$this->getName()])) {
+				continue;
+			}
+			$this->addCong(floatval($cong[$this->getName()]));
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @return float|int
+	 */
+	public function getCongNhat()
+	{
+		return ($this->getCong() >= 28 ? 28 : $this->getCong()) * ($this->getLuongCoBan() / 28);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getNangSuat()
+	{
+		$luong = 0;
+		foreach ($this->getTuyen() as $time => $ns) {
+			$luong += $ns['luong'];
+		}
+
+		return $luong;
+	}
+
+	/**
+	 * @param array $phanCong
+	 *
+	 * @return $this
+	 */
+	public function setTuyen($phanCong = array())
+	{
+		foreach ($phanCong as $time => $xe) {
+			$this->addTuyen($time, $xe);
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param array $nangSuat
+	 *
+	 * @return $this
+	 */
+	public function setNangSuat($nangSuat = array())
+	{
+		foreach ($nangSuat as $time => $ns) {
+			$this->addNangSuat($time, $ns);
+		}
+
+		return $this;
 	}
 
 	/**
@@ -25,11 +136,15 @@ class NhanSu extends CI_Model
 
 	/**
 	 * @param string $name
+	 *
+	 * @return $this
 	 */
 	public function setName(
 		string $name
 	) {
 		$this->name = $name;
+
+		return $this;
 	}
 
 	/**
@@ -42,11 +157,15 @@ class NhanSu extends CI_Model
 
 	/**
 	 * @param int $luongCoBan
+	 *
+	 * @return $this
 	 */
 	public function setLuongCoBan(
 		int $luongCoBan
 	) {
 		$this->luongCoBan = $luongCoBan;
+
+		return $this;
 	}
 
 	/**
@@ -59,11 +178,15 @@ class NhanSu extends CI_Model
 
 	/**
 	 * @param float $nangSuatCoBan
+	 *
+	 * @return $this
 	 */
 	public function setNangSuatCoBan(
 		float $nangSuatCoBan
 	) {
 		$this->nangSuatCoBan = $nangSuatCoBan;
+
+		return $this;
 	}
 
 	/**
@@ -76,11 +199,15 @@ class NhanSu extends CI_Model
 
 	/**
 	 * @param float $nangSuatMuc1
+	 *
+	 * @return $this
 	 */
 	public function setNangSuatMuc1(
 		float $nangSuatMuc1
 	) {
 		$this->nangSuatMuc1 = $nangSuatMuc1;
+
+		return $this;
 	}
 
 	/**
@@ -93,10 +220,111 @@ class NhanSu extends CI_Model
 
 	/**
 	 * @param float $nangSuatMuc2
+	 *
+	 * @return $this
 	 */
 	public function setNangSuatMuc2(
 		float $nangSuatMuc2
 	) {
 		$this->nangSuatMuc2 = $nangSuatMuc2;
+
+		return $this;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getCong(): float
+	{
+		return $this->cong;
+	}
+
+	/**
+	 * @param float $cong
+	 *
+	 * @return $this
+	 */
+	public function setCong(float $cong)
+	{
+		$this->cong = $cong;
+
+		return $this;
+	}
+
+	/**
+	 * @param float $cong
+	 *
+	 * @return $this
+	 */
+	public function addCong(float $cong)
+	{
+		$this->cong += $cong;
+
+		return $this;
+	}
+
+	/**
+	 * @return array
+	 */
+	public function getTuyen(): array
+	{
+		return $this->tuyen;
+	}
+
+	/**
+	 * @param $time
+	 * @param $xe
+	 *
+	 * @return $this
+	 */
+	public function addTuyen($time, $xe)
+	{
+		foreach ($xe as $xe_bs => $xe_lai) {
+			$xe_lai = explode('-', $xe_lai);
+			if (in_array(strtolower($this->getName()), $xe_lai)) {
+				$this->tuyen[$time]          = (isset($this->tuyen[$time]) && is_array($this->tuyen[$time]))
+					? $this->tuyen[$time] : array();
+				$this->tuyen[$time]['xe']    = $xe_bs;
+				$this->tuyen[$time]['ti le'] = 1 / sizeof($xe_lai);
+			}
+		}
+
+		return $this;
+	}
+
+	/**
+	 * @param $time
+	 * @param $ns
+	 *
+	 * @return $this
+	 */
+	public function addNangSuat($time, $ns)
+	{
+		if (!isset($this->tuyen[$time]) || !is_array($this->tuyen[$time])) {
+			return $this;
+		}
+		$this->tuyen[$time]['nang suat'] = $ns[$this->tuyen[$time]['xe']];
+		$ti_suat                         = $this->getNangSuatCoBan();
+		if ($this->tuyen[$time]['nang suat'] > 20000) {
+			$ti_suat = $this->getNangSuatMuc1();
+		}
+		if ($this->tuyen[$time]['nang suat'] > 45000) {
+			$ti_suat = $this->getNangSuatMuc2();
+		}
+		$this->tuyen[$time]['luong'] = $this->tuyen[$time]['nang suat'];
+		$this->tuyen[$time]['luong'] *= $ti_suat;
+		$this->tuyen[$time]['luong'] *= $this->tuyen[$time]['ti le'];
+
+		return $this;
+	}
+
+	/**
+	 * @param $arg
+	 */
+	private function debug($arg)
+	{
+		echo '<pre>';
+		print_r($arg);
+		echo '</pre>';
 	}
 }

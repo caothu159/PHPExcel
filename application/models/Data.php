@@ -68,7 +68,13 @@ class Data extends CI_Model
 	 */
 	public function getNhanSu()
 	{
-		return $this->fileContent('nhanvien.xlsx');
+		$lstNs = array();
+
+		foreach ($this->fileContent('nhanvien.xlsx') as $name => $nv) {
+			$lstNs[$name] = new NhanSu($name, $nv);
+		}
+
+		return $lstNs;
 	}
 
 	/**
@@ -180,9 +186,13 @@ class Data extends CI_Model
 
 	/**
 	 * @param $time
+	 *
+	 * @return $this
 	 */
 	public function setTime($time)
 	{
 		$this->time = $time;
+
+		return $this;
 	}
 }
