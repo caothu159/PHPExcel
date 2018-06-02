@@ -36,6 +36,11 @@ class NhanSu extends CI_Model
 	private $cong = 0;
 
 	/**
+	 * @var float
+	 */
+	private $congDem = 0;
+
+	/**
 	 * @var array
 	 */
 	private $tuyen = array();
@@ -71,7 +76,13 @@ class NhanSu extends CI_Model
 			if (!isset($cong[$this->getName()])) {
 				continue;
 			}
-			$this->addCong(floatval($cong[$this->getName()]));
+			$cong = floatval($cong[$this->getName()]);
+			if ($cong >= 2) {
+				$this->addCong(1);
+				$this->addCongDem($cong - 1);
+			} else {
+				$this->addCong($cong);
+			}
 		}
 
 		return $this;
@@ -82,7 +93,12 @@ class NhanSu extends CI_Model
 	 */
 	public function getCongNhat()
 	{
-		return ($this->getCong() >= 28 ? 28 : $this->getCong()) * ($this->getLuongCoBan() / 28);
+		$cong = $this->getCong();
+		$cong = $cong >= 28 ? 28 : $cong;
+		$cong += $this->getCongDem();
+		$cong *= $this->getLuongCoBan() / 28;
+
+		return $cong;
 	}
 
 	/**
@@ -259,6 +275,38 @@ class NhanSu extends CI_Model
 	public function addCong(float $cong)
 	{
 		$this->cong += $cong;
+
+		return $this;
+	}
+
+	/**
+	 * @return float
+	 */
+	public function getCongDem(): float
+	{
+		return $this->congDem;
+	}
+
+	/**
+	 * @param float $congDem
+	 *
+	 * @return $this
+	 */
+	public function setCongDem(float $congDem)
+	{
+		$this->congDem = $congDem;
+
+		return $this;
+	}
+
+	/**
+	 * @param float $cong
+	 *
+	 * @return $this
+	 */
+	public function addCongDem(float $cong)
+	{
+		$this->congDem += $cong;
 
 		return $this;
 	}
