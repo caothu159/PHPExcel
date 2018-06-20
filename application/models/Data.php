@@ -138,8 +138,8 @@ class Data extends CI_Model
 											  false,
 											  true);
 		foreach ($rowsData as $rowData) {
-			foreach ($rowData as $cellRef => $cellData) {
-				$cellData = $this->contentRepair($cellData);
+			foreach ($rowData as $cellRef => $cellOriginData) {
+				$cellData = $this->contentRepair($cellOriginData);
 				if (empty($cellData)
 					|| is_null($cellData)
 					|| $cellData == ''

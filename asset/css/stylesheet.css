@@ -1,0 +1,44 @@
+.nhansu {
+	display: block;
+	margin-top: 20px;
+}
+
+.nhansu .title {
+	border-bottom: 1px solid #eeeeee;
+	display: block;
+	line-height: 25px;
+	max-width: 350px;
+	padding-left: 15px;
+	width: 100%;
+}
+
+.nhansu .title span {
+	display: block;
+	float: right;
+	font-size: 14px;
+	font-weight: 300;
+	text-align: right;
+}
+
+.nhansu .title.cong span {
+	color: indianred;
+}
+
+.nhansu .title.congnhat span {
+	color: blue;
+}
+
+.nhansu .title.nangsuat span {
+	color: blue;
+}
+
+.nhansu .title.luong span {
+	color: orangered;
+	font-weight: 600;
+}
+
+.nhansu .chitiet {
+	font-size: 12px;
+	padding-left: 15px;
+	padding-right: 15px;
+}

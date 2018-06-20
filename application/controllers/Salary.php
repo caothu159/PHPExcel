@@ -53,9 +53,9 @@ class Salary extends CI_Controller
 	 */
 	private function prepareHtml($time)
 	{
-		$this->load->view('list', array(
-			'list' => array(),
-		));
+//		$this->load->view('list', array(
+//			'list' => array(),
+//		));
 		if (!$time) {
 			return;
 		}
@@ -63,15 +63,17 @@ class Salary extends CI_Controller
 			->setTime($time)
 			->getNhanSu();
 
+		$nhanSu = array();
 		foreach ($this->nhanSu as $name => $ns) {
 			$ns->setCongNhat($this->data->chamcong())
 			   ->setTuyen($this->data->phancong())
 			   ->setNangSuat($this->data->nangsuat());
-			$this->debug($name);
-			$this->debug($ns->getCongNhat());
-			$this->debug($ns->getNangSuat());
-			$this->debug($ns);
+			$nhanSu[$name] = $ns;
 		}
+
+		$this->load->view('salary', array(
+			'salary' => $nhanSu,
+		));
 	}
 
 	/**
