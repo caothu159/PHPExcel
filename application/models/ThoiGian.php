@@ -8,7 +8,6 @@ class ThoiGian extends CI_Model
 	const DATADIR = 'Data';
 
 	/**
-	 * @param       $dir
 	 * @param array $ignored
 	 *
 	 * @return array
@@ -17,16 +16,10 @@ class ThoiGian extends CI_Model
 	{
 		$files = array();
 		foreach (array_diff(scandir(self::DATADIR), $ignored) as $file) {
-			$files[$file] = filemtime(self::DATADIR.DIRECTORY_SEPARATOR.$file);
+			$files[$file] = '/salary/time'.DIRECTORY_SEPARATOR.$file;
 		}
 
-		arsort($files);
-		$files = array_keys($files);
-		foreach ($files as $key => $file) {
-			$files[$key] = '/salary/time'.DIRECTORY_SEPARATOR.$file;
-		}
-
-		return ($files) ? $files : array();
+		return $files ? : array();
 	}
 
 }

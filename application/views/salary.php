@@ -1,5 +1,5 @@
 <!-- Luong -->
-<div class="col-xs-9">
+<div class="col-xs-12 col-sm-8 col-md-9">
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 		<?php foreach ($salary as $name => $ns): ?>
 			<div class="panel panel-default">
@@ -26,9 +26,9 @@
 							<?php $this->load->view('salary/nhansu', array('nhansu' => $ns)); ?>
 						</div>
 					</div>
-					<div class="table-responsive chitiet">
+					<?php if ($ns->getNangSuat() > 0): ?>
 						<?php $this->load->view('salary/chitiet', array('nhansu' => $ns)); ?>
-					</div>
+					<?php endif; ?>
 				</div>
 			</div>
 		<?php endforeach; ?>
