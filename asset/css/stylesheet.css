@@ -1,3 +1,8 @@
+.panel-title a {
+	display: block;
+	text-decoration: none;
+}
+
 .nhansu {
 	display: block;
 	margin-top: 20px;
@@ -37,8 +42,41 @@
 	font-weight: 600;
 }
 
-.nhansu .chitiet {
+.chitiet {
 	font-size: 12px;
 	padding-left: 15px;
 	padding-right: 15px;
+}
+
+.chitiet .xe {
+	color: black;
+	display: block;
+	font-weight: 600;
+}
+
+.chitiet .xe span {
+	color: blue;
+	font-weight: 300;
+	margin-left: 15px;
+	text-indent: 15px;
+}
+
+.chitiet .cho-no {
+	display: block;
+}
+
+.chitiet .cho-no span {
+	color: blue;
+	margin-left: 15px;
+	text-indent: 15px;
+}
+
+.chitiet .thu-no {
+	display: block;
+}
+
+.chitiet .thu-no span {
+	color: blue;
+	margin-left: 15px;
+	text-indent: 15px;
 }

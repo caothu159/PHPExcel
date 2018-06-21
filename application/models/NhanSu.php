@@ -16,49 +16,9 @@ class NhanSu extends CI_Model
 	private $luongCoBan = 3000;
 
 	/**
-	 * @var float
+	 * @var array
 	 */
-	private $nangSuatCoBan = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc1 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc2 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc3 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc4 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc5 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc6 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc7 = 0.1;
-
-	/**
-	 * @var float
-	 */
-	private $nangSuatMuc8 = 0.1;
+	private $dataNangSuat = array();
 
 	/**
 	 * @var float
@@ -100,28 +60,13 @@ class NhanSu extends CI_Model
 		}
 		$data = array_replace(
 			array(
-				'Luong co ban'     => 0,
-				'Nang suat co ban' => 0,
-				'12.5'             => 0,
-				'20'               => 0,
-				'25'               => 0,
-				'30'               => 0,
-				'35'               => 0,
-				'42.5'             => 0,
-				'50'               => 0,
-				'max'              => 0,
+				'Luong co ban' => 0,
+				'Ti le'        => 0.5,
+				'Bat cap'      => '',
 			), $data);
 		$this->setName($name)
 			 ->setLuongCoBan($data['Luong co ban'] ? : 0)
-			 ->setNangSuatCoBan($data['Nang suat co ban'] ? : 0)
-			 ->setNangSuatMuc1($data['12.5'] ? : 0)
-			 ->setNangSuatMuc2($data['20'] ? : 0)
-			 ->setNangSuatMuc3($data['25'] ? : 0)
-			 ->setNangSuatMuc4($data['30'] ? : 0)
-			 ->setNangSuatMuc5($data['35'] ? : 0)
-			 ->setNangSuatMuc6($data['42.5'] ? : 0)
-			 ->setNangSuatMuc7($data['50'] ? : 0)
-			 ->setNangSuatMuc8($data['max'] ? : 0)
+			 ->setDuLieuNangSuat($data)
 			 ->setTiLe($data['Ti le'] ? : 0.5)
 			 ->setBatCap($data['Bat cap'] ? : '*');
 	}
@@ -248,186 +193,40 @@ class NhanSu extends CI_Model
 	}
 
 	/**
-	 * @return float
-	 */
-	public function getNangSuatCoBan(): float
-	{
-		return $this->nangSuatCoBan;
-	}
-
-	/**
-	 * @param float $nangSuatCoBan
+	 * @param $data
 	 *
 	 * @return $this
 	 */
-	public function setNangSuatCoBan(
-		float $nangSuatCoBan
-	) {
-		$this->nangSuatCoBan = $nangSuatCoBan;
+	public function setDuLieuNangSuat($data)
+	{
+		foreach ($data as $nangSuat => $tiLe) {
+			if (!is_numeric($nangSuat) || !is_numeric($tiLe)) {
+				continue;
+			}
+			$this->dataNangSuat[$nangSuat] = floatval($tiLe);
+		}
 
 		return $this;
 	}
 
 	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc1(): float
-	{
-		return $this->nangSuatMuc1;
-	}
-
-	/**
-	 * @param float $nangSuatMuc1
+	 * @param $ns
 	 *
-	 * @return $this
+	 * @return int|mixed
 	 */
-	public function setNangSuatMuc1(
-		float $nangSuatMuc1
-	) {
-		$this->nangSuatMuc1 = $nangSuatMuc1;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc2(): float
+	public function getDuLieuNangSuat($ns)
 	{
-		return $this->nangSuatMuc2;
-	}
+		$return = 0;
+		foreach ($this->dataNangSuat as $nangSuat => $tiLe) {
+			if (!is_numeric($nangSuat) || !is_numeric($ns)) {
+				continue;
+			}
+			if ($ns > $nangSuat * 1000) {
+				$return = max($return, $tiLe);
+			}
+		}
 
-	/**
-	 * @param float $nangSuatMuc2
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc2(
-		float $nangSuatMuc2
-	) {
-		$this->nangSuatMuc2 = $nangSuatMuc2;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc3(): float
-	{
-		return $this->nangSuatMuc3;
-	}
-
-	/**
-	 * @param float $nangSuatMuc3
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc3(float $nangSuatMuc3)
-	{
-		$this->nangSuatMuc3 = $nangSuatMuc3;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc4(): float
-	{
-		return $this->nangSuatMuc4;
-	}
-
-	/**
-	 * @param float $nangSuatMuc4
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc4(float $nangSuatMuc4)
-	{
-		$this->nangSuatMuc4 = $nangSuatMuc4;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc5(): float
-	{
-		return $this->nangSuatMuc5;
-	}
-
-	/**
-	 * @param float $nangSuatMuc5
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc5(float $nangSuatMuc5)
-	{
-		$this->nangSuatMuc5 = $nangSuatMuc5;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc6(): float
-	{
-		return $this->nangSuatMuc6;
-	}
-
-	/**
-	 * @param float $nangSuatMuc6
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc6(float $nangSuatMuc6)
-	{
-		$this->nangSuatMuc6 = $nangSuatMuc6;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc7(): float
-	{
-		return $this->nangSuatMuc7;
-	}
-
-	/**
-	 * @param float $nangSuatMuc7
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc7(float $nangSuatMuc7)
-	{
-		$this->nangSuatMuc7 = $nangSuatMuc7;
-
-		return $this;
-	}
-
-	/**
-	 * @return float
-	 */
-	public function getNangSuatMuc8(): float
-	{
-		return $this->nangSuatMuc8;
-	}
-
-	/**
-	 * @param float $nangSuatMuc8
-	 *
-	 * @return $this
-	 */
-	public function setNangSuatMuc8(float $nangSuatMuc8)
-	{
-		$this->nangSuatMuc8 = $nangSuatMuc8;
-
-		return $this;
+		return $return;
 	}
 
 	/**
@@ -587,45 +386,9 @@ class NhanSu extends CI_Model
 		$this->tuyen[$time]['nang suat']    += $this->tuyen[$time]['cho no'] * 0.7;
 		$this->tuyen[$time]['nang suat']    -= $this->tuyen[$time]['thu no'] * 0.7;
 		$this->tuyen[$time]['nang suat']    *= $this->tuyen[$time]['ti le'] ? : 0;
-		$ti_suat                            = $this->getNangSuatMuc1();
-		switch (true) {
-
-			case $this->tuyen[$time]['nang suat'] > 50000:
-				$ti_suat = $this->getNangSuatMuc8();
-				break;
-
-			case $this->tuyen[$time]['nang suat'] > 42500:
-				$ti_suat = $this->getNangSuatMuc7();
-				break;
-
-			case $this->tuyen[$time]['nang suat'] > 35000:
-				$ti_suat = $this->getNangSuatMuc6();
-				break;
-
-			case $this->tuyen[$time]['nang suat'] > 30000:
-				$ti_suat = $this->getNangSuatMuc5();
-				break;
-
-			case $this->tuyen[$time]['nang suat'] > 25000:
-				$ti_suat = $this->getNangSuatMuc4();
-				break;
-
-			case $this->tuyen[$time]['nang suat'] > 20000:
-				$ti_suat = $this->getNangSuatMuc3();
-				break;
-
-			case $this->tuyen[$time]['nang suat'] > 12500:
-				$ti_suat = $this->getNangSuatMuc2();
-				break;
-
-			default:
-				$ti_suat = $this->getNangSuatMuc1();
-				break;
-		}
-
-		$this->tuyen[$time]['ti suat'] = $ti_suat;
-		$this->tuyen[$time]['luong']   = $this->tuyen[$time]['nang suat'];
-		$this->tuyen[$time]['luong']   *= $ti_suat;
+		$this->tuyen[$time]['ti suat']      = $this->getDuLieuNangSuat($this->tuyen[$time]['nang suat']);
+		$this->tuyen[$time]['luong']        = $this->tuyen[$time]['nang suat'];
+		$this->tuyen[$time]['luong']        *= $this->tuyen[$time]['ti suat'];
 
 		return $this;
 	}

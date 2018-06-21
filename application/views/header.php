@@ -27,3 +27,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <!-- !Header -->
 <body>
+<div class="container-fluid">
+	<div class="row">

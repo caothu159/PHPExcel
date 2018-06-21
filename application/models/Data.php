@@ -63,7 +63,7 @@ class Data extends CI_Model
 	}
 
 	/**
-	 * @return array|void
+	 * @return array
 	 * @throws \PHPExcel_Reader_Exception
 	 */
 	public function getNhanSu()

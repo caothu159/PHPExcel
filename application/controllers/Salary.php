@@ -10,18 +10,6 @@ class Salary extends CI_Controller
 	 * @var array
 	 */
 	private $nhanSu = array();
-	/**
-	 * @var array
-	 */
-	private $nangsuat = array();
-	/**
-	 * @var array
-	 */
-	private $chamcong = array();
-	/**
-	 * @var array
-	 */
-	private $phancong = array();
 
 	/**
 	 * Salary constructor.
@@ -30,6 +18,7 @@ class Salary extends CI_Controller
 	{
 		parent::__construct();
 		$this->load->model('data');
+		$this->load->model('thoiGian');
 	}
 
 	/**
@@ -53,9 +42,9 @@ class Salary extends CI_Controller
 	 */
 	private function prepareHtml($time)
 	{
-//		$this->load->view('list', array(
-//			'list' => array(),
-//		));
+		$this->load->view('list', array(
+			'list' => $this->thoiGian->list(),
+		));
 		if (!$time) {
 			return;
 		}

@@ -1,6 +1,5 @@
 <!-- Luong -->
-<div class="container-fluid">
-
+<div class="col-xs-9">
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
 		<?php foreach ($salary as $name => $ns): ?>
 			<div class="panel panel-default">
@@ -26,6 +25,9 @@
 						<div class="nhansu">
 							<?php $this->load->view('salary/nhansu', array('nhansu' => $ns)); ?>
 						</div>
+					</div>
+					<div class="table-responsive chitiet">
+						<?php $this->load->view('salary/chitiet', array('nhansu' => $ns)); ?>
 					</div>
 				</div>
 			</div>
