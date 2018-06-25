@@ -1,3 +1,7 @@
+body {
+	padding-top: 70px;
+}
+
 .panel-title a {
 	display: block;
 	text-decoration: none;

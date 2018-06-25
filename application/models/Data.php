@@ -195,4 +195,12 @@ class Data extends CI_Model
 
 		return $this;
 	}
+
+	/**
+	 * @return bool|int
+	 */
+	public function getTime()
+	{
+		return $this->time;
+	}
 }

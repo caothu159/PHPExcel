@@ -40,10 +40,11 @@ class Salary extends CI_Controller
 	/**
 	 * @param $time
 	 */
-	private function prepareHtml($time)
+	private function prepareHtml($time = false)
 	{
 		$this->load->view('list', array(
 			'list' => $this->thoiGian->list(),
+			'time' => $time,
 		));
 		if (!$time) {
 			return;
@@ -70,7 +71,9 @@ class Salary extends CI_Controller
 	 */
 	private function prepare($time = false)
 	{
-		$this->load->view('header');
+		$this->load->view('header', array(
+			'time' => $time,
+		));
 		$this->prepareHtml($time);
 		$this->load->view('footer');
 	}

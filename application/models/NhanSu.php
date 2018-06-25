@@ -100,9 +100,9 @@ class NhanSu extends CI_Model
 	public function getCongNhat()
 	{
 		$cong = $this->getCong();
-		$cong = $cong >= 28 ? 28 : $cong;
+		$cong = $cong >= 30 ? 30 : $cong;
 		$cong += $this->getCongDem();
-		$cong *= $this->getLuongCoBan() / 28;
+		$cong *= $this->getLuongCoBan() / 30;
 		$cong = intval($cong);
 
 		return $cong;

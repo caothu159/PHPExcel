@@ -4,9 +4,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <!-- Header -->
 <head>
-	<title>Lương</title>
+	<title>Lương <?php echo $time ? : ''; ?></title>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
 	<!-- Latest compiled and minified CSS -->
 	<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
 		  integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -27,5 +28,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <!-- !Header -->
 <body>
+<nav class="navbar navbar-default navbar-fixed-top">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="<?php echo base_url(); ?>">
+				Trang chủ
+			</a>
+		</div>
+		<p class="navbar-text navbar-right">Trang thông báo lương nhân viên Điệp Xuân</p>
+	</div>
+</nav>
 <div class="container-fluid">
 	<div class="row">
