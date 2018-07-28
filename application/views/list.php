@@ -2,7 +2,7 @@
 <div class="col-xs-12 col-sm-4 col-md-3">
 	<div class="panel panel-primary">
 		<div class="panel-heading">
-			<h3 class="panel-title">Thời gian</h3>
+			<h3 class="panel-title">Thời gian <?php echo $time; ?></h3>
 		</div>
 		<div class="panel-body">
 
@@ -17,11 +17,17 @@
 			</form>
 		</div>
 		<table class="table">
-			<?php foreach ($list as $time => $filename) : ?>
+			<?php foreach ($list as $t => $filename) : ?>
 				<tr>
 					<td>
 						<a href="<?php echo $filename; ?>">
-							<?php echo $time; ?>
+							<?php if ($t == $time): ?>
+								<strong>
+									<?php echo $t; ?>
+								</strong>
+							<?php else: ?>
+								<?php echo $t; ?>
+							<?php endif; ?>
 						</a>
 					</td>
 				</tr>
