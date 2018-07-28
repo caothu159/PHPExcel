@@ -64,44 +64,65 @@ class Data extends CI_Model
 
 	/**
 	 * @return array
-	 * @throws \PHPExcel_Reader_Exception
 	 */
 	public function getNhanSu()
 	{
 		$lstNs = array();
 
-		foreach ($this->fileContent('nhanvien.xlsx') as $name => $nv) {
-			$lstNs[$name] = new NhanSu($name, $nv);
+		try {
+			foreach ($this->fileContent('nhanvien.xlsx') as $name => $nv) {
+				$lstNs[$name] = new NhanSu($name, $nv);
+			}
+		} catch (\PHPExcel_Reader_Exception $e) {
+
 		}
 
 		return $lstNs;
 	}
 
 	/**
-	 * @return array|void
-	 * @throws \PHPExcel_Reader_Exception
+	 * @return array
 	 */
 	public function nangsuat()
 	{
-		return $this->fileContent('nangsuat.xlsx');
+		try {
+			foreach ($this->fileContent('nangsuat.xlsx') as $name => $nv) {
+				$lstNs[$name] = new NhanSu($name, $nv);
+			}
+		} catch (\PHPExcel_Reader_Exception $e) {
+		}
+
+		return array();
 	}
 
 	/**
-	 * @return array|void
-	 * @throws \PHPExcel_Reader_Exception
+	 * @return array
 	 */
 	public function chamcong()
 	{
-		return $this->fileContent('chamcong.xlsx');
+		try {
+			foreach ($this->fileContent('chamcong.xlsx') as $name => $nv) {
+				$lstNs[$name] = new NhanSu($name, $nv);
+			}
+		} catch (\PHPExcel_Reader_Exception $e) {
+		}
+
+		return array();
 	}
 
 	/**
-	 * @return array|void
-	 * @throws \PHPExcel_Reader_Exception
+	 * @return array
 	 */
 	public function phancong()
 	{
-		return $this->fileContent('phancong.xlsx');
+		try {
+			foreach ($this->fileContent('phancong.xlsx') as $name => $nv) {
+				$lstNs[$name] = new NhanSu($name, $nv);
+			}
+		} catch (\PHPExcel_Reader_Exception $e) {
+		}
+
+		return array();
 	}
 
 	/**
