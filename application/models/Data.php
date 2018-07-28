@@ -86,13 +86,10 @@ class Data extends CI_Model
 	public function nangsuat()
 	{
 		try {
-			foreach ($this->fileContent('nangsuat.xlsx') as $name => $nv) {
-				$lstNs[$name] = new NhanSu($name, $nv);
-			}
+			return $this->fileContent('nangsuat.xlsx');
 		} catch (\PHPExcel_Reader_Exception $e) {
+			return array();
 		}
-
-		return array();
 	}
 
 	/**
@@ -101,13 +98,10 @@ class Data extends CI_Model
 	public function chamcong()
 	{
 		try {
-			foreach ($this->fileContent('chamcong.xlsx') as $name => $nv) {
-				$lstNs[$name] = new NhanSu($name, $nv);
-			}
+			return $this->fileContent('chamcong.xlsx');
 		} catch (\PHPExcel_Reader_Exception $e) {
+			return array();
 		}
-
-		return array();
 	}
 
 	/**
@@ -116,13 +110,10 @@ class Data extends CI_Model
 	public function phancong()
 	{
 		try {
-			foreach ($this->fileContent('phancong.xlsx') as $name => $nv) {
-				$lstNs[$name] = new NhanSu($name, $nv);
-			}
+			return $this->fileContent('phancong.xlsx');
 		} catch (\PHPExcel_Reader_Exception $e) {
+			return array();
 		}
-
-		return array();
 	}
 
 	/**
