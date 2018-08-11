@@ -58,6 +58,22 @@ class NhanSu extends CI_Model
 		if (!$name) {
 			return;
 		}
+
+		$allow = array(
+			gethostbyname('dxvn.ddns.net'),
+			gethostbyname('kho2.ddns.net'),
+		); //allowed IPs
+
+		if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && !in_array($_SERVER["HTTP_X_FORWARDED_FOR"], $allow)) {
+			header("HTTP/1.0 404 Not Found");
+			exit();
+		}
+
+		if (isset($_SERVER["REMOTE_ADDR"]) && !in_array($_SERVER['REMOTE_ADDR'], $allow)) {
+			header("HTTP/1.0 404 Not Found");
+			exit();
+		}
+
 		$data = array_replace(
 			array(
 				'Luong co ban' => 0,
