@@ -139,6 +139,20 @@ class NhanSu extends CI_Model
 	}
 
 	/**
+	 * @return array|float|int
+	 */
+	public function getHieuSuat()
+	{
+		$hieuSuat = $this->getCongNhat();
+		$hieuSuat += $this->getNangSuat();
+		$hieuSuat /= $this->getCong();
+		$hieuSuat *= 30;
+		$hieuSuat = intval($hieuSuat);
+
+		return $hieuSuat;
+	}
+
+	/**
 	 * @param array $phanCong
 	 *
 	 * @return $this
@@ -285,6 +299,29 @@ class NhanSu extends CI_Model
 		return $this;
 	}
 
+	public function getTileBatCap($lx)
+	{
+		if (sizeof($lx) !== 2) {
+			return 1 / sizeof($lx);
+		}
+
+		$bc = $this->getBatCap();
+		$bc = explode('|', $bc);
+		foreach ($bc as $cap) {
+			if (in_array(strtolower($cap), $lx)) {
+				return $this->getTiLe();
+			}
+
+			$caplv2 = explode(':', trim($cap));
+
+			if (sizeof($caplv2) == 2 && in_array(strtolower($caplv2[0]), $lx)) {
+				return $caplv2[1];
+			}
+		}
+
+		return 1 / sizeof($lx);
+	}
+
 	/**
 	 * @return float
 	 */
@@ -372,11 +409,7 @@ class NhanSu extends CI_Model
 				$this->tuyen[$time]          = (isset($this->tuyen[$time]) && is_array($this->tuyen[$time]))
 					? $this->tuyen[$time] : array();
 				$this->tuyen[$time]['xe']    = trim($xe_bs, 'x');
-				$this->tuyen[$time]['ti le'] = 1 / sizeof($xe_lai);
-
-				if (sizeof($xe_lai) == 2 && in_array(strtolower($this->getBatCap()), $xe_lai)) {
-					$this->tuyen[$time]['ti le'] = $this->getTiLe();
-				}
+				$this->tuyen[$time]['ti le'] = $this->getTileBatCap($xe_lai);
 			}
 
 		}
