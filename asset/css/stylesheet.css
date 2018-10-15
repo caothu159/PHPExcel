@@ -41,6 +41,15 @@ body {
 	color: blue;
 }
 
+.nhansu .title.hieusuat {
+	font-size: 11px;
+}
+
+.nhansu .title.hieusuat span {
+	color: yellowgreen;
+	font-size: 11px;
+}
+
 .nhansu .title.luong span {
 	color: orangered;
 	font-weight: 600;
