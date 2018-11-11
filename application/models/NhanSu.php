@@ -153,6 +153,20 @@ class NhanSu extends CI_Model
 	}
 
 	/**
+	 * @return array|float|int
+	 */
+	public function getDoanhSo()
+	{
+		$doanhso = 0;
+		foreach ($this->getTuyen() as $time => $ds) {
+			$doanhso += $ds['nang suat xe'];
+		}
+		$doanhso = intval($doanhso);
+
+		return $doanhso;
+	}
+
+	/**
 	 * @param array $phanCong
 	 *
 	 * @return $this

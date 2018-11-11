@@ -42,12 +42,21 @@ body {
 }
 
 .nhansu .title.hieusuat {
-	font-size: 11px;
+	font-size: 12px;
 }
 
 .nhansu .title.hieusuat span {
 	color: yellowgreen;
-	font-size: 11px;
+	font-size: 12px;
+}
+
+.nhansu .title.doanhso {
+	font-size: 12px;
+}
+
+.nhansu .title.doanhso span {
+	color: yellowgreen;
+	font-size: 12px;
 }
 
 .nhansu .title.luong span {
