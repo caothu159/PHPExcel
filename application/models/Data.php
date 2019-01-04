@@ -74,7 +74,7 @@ class Data extends CI_Model
 				$lstNs[$name] = new NhanSu($name, $nv);
 			}
 		} catch (\PHPExcel_Reader_Exception $e) {
-
+			$this->debug($e);
 		}
 
 		return $lstNs;
@@ -88,7 +88,8 @@ class Data extends CI_Model
 		try {
 			return $this->fileContent('nangsuat.xlsx');
 		} catch (\PHPExcel_Reader_Exception $e) {
-			return array();
+			$this->debug($e);
+
 		}
 	}
 
@@ -100,11 +101,11 @@ class Data extends CI_Model
 		try {
 			return $this->fileContent('chamcong.xlsx');
 		} catch (\PHPExcel_Reader_Exception $e) {
-			return array();
+			$this->debug($e);
 		}
 	}
 
-	/**
+	/*
 	 * @return array
 	 */
 	public function phancong()
@@ -214,5 +215,15 @@ class Data extends CI_Model
 	public function getTime()
 	{
 		return $this->time;
+	}
+
+	/**
+	 * @param $arg
+	 */
+	private function debug($arg)
+	{
+//		echo '<pre>';
+//		print_r($arg);
+//		echo '</pre>';
 	}
 }
