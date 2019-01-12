@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <html lang="en">
 <!-- Header -->
 <head>
-	<title>Lương <?php echo $time ? : ''; ?></title>
+	<title>Lương <?php echo str_replace('-', ' ', $time) ? : ''; ?></title>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 				Trang chủ
 			</a>
 		</div>
-		<p class="navbar-text navbar-right">Trang thông báo lương nhân viên Điệp Xuân</p>
+		<p class="navbar-text navbar-right">Trang thống kê sơ bộ lương nhân viên Điệp Xuân</p>
 	</div>
 </nav>
 <div class="container-fluid">

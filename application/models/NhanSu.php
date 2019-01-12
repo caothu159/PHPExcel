@@ -59,20 +59,20 @@ class NhanSu extends CI_Model
 			return;
 		}
 
-		$allow = array(
-			gethostbyname('dxvn.ddns.net'),
-			gethostbyname('kho2.ddns.net'),
-		); //allowed IPs
-
-		if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && !in_array($_SERVER["HTTP_X_FORWARDED_FOR"], $allow)) {
-			header("HTTP/1.0 404 Not Found");
-			exit();
-		}
-
-		if (isset($_SERVER["REMOTE_ADDR"]) && !in_array($_SERVER['REMOTE_ADDR'], $allow)) {
-			header("HTTP/1.0 404 Not Found");
-			exit();
-		}
+//		$allow = array(
+//			gethostbyname('dxvn.ddns.net'),
+//			gethostbyname('kho2.ddns.net'),
+//		); //allowed IPs
+//
+//		if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]) && !in_array($_SERVER["HTTP_X_FORWARDED_FOR"], $allow)) {
+//			header("HTTP/1.0 404 Not Found");
+//			exit();
+//		}
+//
+//		if (isset($_SERVER["REMOTE_ADDR"]) && !in_array($_SERVER['REMOTE_ADDR'], $allow)) {
+//			header("HTTP/1.0 404 Not Found");
+//			exit();
+//		}
 
 		$data = array_replace(
 			array(
@@ -116,7 +116,7 @@ class NhanSu extends CI_Model
 	public function getCongNhat()
 	{
 		$cong = $this->getCong();
-		$cong = $cong >= 30 ? 30 : $cong;
+//		$cong = $cong >= 30 ? 30 : $cong;
 		$cong += $this->getCongDem();
 		$cong *= $this->getLuongCoBan() / 30;
 		$cong = intval($cong);
@@ -160,6 +160,20 @@ class NhanSu extends CI_Model
 		$doanhso = 0;
 		foreach ($this->getTuyen() as $time => $ds) {
 			$doanhso += $ds['nang suat xe'];
+		}
+		$doanhso = intval($doanhso);
+
+		return $doanhso;
+	}
+
+	/**
+	 * @return array|float|int
+	 */
+	public function getTongNangSuat()
+	{
+		$doanhso = 0;
+		foreach ($this->getTuyen() as $time => $ds) {
+			$doanhso += $ds['nang suat'];
 		}
 		$doanhso = intval($doanhso);
 

@@ -7,7 +7,7 @@
 <?php if ($nhansu->getNangSuat() > 0): ?>
 	<div class="title congnhat">Lương cứng: <span>
 			<?php echo number_format($nhansu->getCongNhat()); ?></span></div>
-	<div class="title nangsuat">Năng suất: <span>
+	<div class="title nangsuat">Lương năng suất: <span>
 			<?php echo number_format($nhansu->getNangSuat()); ?></span></div>
 	<div class="title luong">Lương: <span>
 			<?php echo number_format($nhansu->getCongNhat()
@@ -16,8 +16,10 @@
 			<?php echo number_format(
 				max($nhansu->getHieuSuat(), $nhansu->getCongNhat() + $nhansu->getNangSuat())
 			); ?></span></div>
-	<div class="title doanhso">Doanh Số: <span>
+	<div class="title tongdoanhso">Tổng doanh Số: <span>
 			<?php echo number_format($nhansu->getDoanhSo()); ?></span></div>
+	<div class="title tongnangsuat">Tổng năng suất: <span>
+			<?php echo number_format($nhansu->getTongNangSuat()); ?></span></div>
 <?php else: ?>
 	<div class="title luong">Lương: <span>
 			<?php echo number_format($nhansu->getCongNhat()); ?></span></div>

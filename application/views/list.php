@@ -20,13 +20,14 @@
 			<?php foreach ($list as $t => $filename) : ?>
 				<tr>
 					<td>
-						<a href="<?php echo $filename; ?>">
+						<a href="<?php echo $filename; ?>"
+						   class="<?php echo strpos($t, 'Chinh-Thuc') ? 'text-primary' : 'text-danger'; ?>">
 							<?php if ($t == $time): ?>
 								<strong>
-									<?php echo $t; ?>
+									<?php echo str_replace('-', ' ', $t); ?>
 								</strong>
 							<?php else: ?>
-								<?php echo $t; ?>
+								<?php echo str_replace('-', ' ', $t); ?>
 							<?php endif; ?>
 						</a>
 					</td>
