@@ -1,10 +1,12 @@
 <?php
+
 defined('BASEPATH') OR exit('No direct script access allowed');
+
 
 /**
  * Class Salary
  */
-class Salary extends CI_Controller
+class Home extends CI_Controller
 {
 	/**
 	 * @var array
@@ -33,16 +35,18 @@ class Salary extends CI_Controller
 	/**
 	 * @param $time
 	 */
-	public function time($time)
-	{
+	public function time(
+		$time
+	) {
 		return $this->prepare($time);
 	}
 
 	/**
 	 * @param $time
 	 */
-	private function prepareHtml($time = false)
-	{
+	private function prepareHtml(
+		$time = false
+	) {
 		$this->load->view('list', array(
 			'list' => $this->thoiGian->list(),
 			'time' => $time,
@@ -70,8 +74,9 @@ class Salary extends CI_Controller
 	/**
 	 * @param bool $time
 	 */
-	private function prepare($time = false)
-	{
+	private function prepare(
+		$time = false
+	) {
 		$this->load->view('header', array(
 			'time' => $time,
 		));
@@ -82,8 +87,9 @@ class Salary extends CI_Controller
 	/**
 	 * @param $arg
 	 */
-	private function debug($arg)
-	{
+	private function debug(
+		$arg
+	) {
 //		echo '<pre>';
 //		print_r($arg);
 //		echo '</pre>';

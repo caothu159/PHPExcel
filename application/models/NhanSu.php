@@ -16,6 +16,11 @@ class NhanSu extends CI_Model
 	private $luongCoBan = 3000;
 
 	/**
+	 * @var int
+	 */
+	private $luongLaiXe = 3000;
+
+	/**
 	 * @var array
 	 */
 	private $dataNangSuat = array();
@@ -116,7 +121,7 @@ class NhanSu extends CI_Model
 	public function getCongNhat()
 	{
 		$cong = $this->getCong();
-		$cong = $cong >= 30 ? 30 : $cong;
+//		$cong = $cong >= 30 ? 30 : $cong;
 		$cong += $this->getCongDem();
 		$cong *= $this->getLuongCoBan() / 30;
 		$cong = intval($cong);
@@ -160,6 +165,20 @@ class NhanSu extends CI_Model
 		$doanhso = 0;
 		foreach ($this->getTuyen() as $time => $ds) {
 			$doanhso += $ds['nang suat xe'];
+		}
+		$doanhso = intval($doanhso);
+
+		return $doanhso;
+	}
+
+	/**
+	 * @return array|float|int
+	 */
+	public function getTongNangSuat()
+	{
+		$doanhso = 0;
+		foreach ($this->getTuyen() as $time => $ds) {
+			$doanhso += $ds['nang suat'];
 		}
 		$doanhso = intval($doanhso);
 
@@ -232,6 +251,27 @@ class NhanSu extends CI_Model
 		int $luongCoBan
 	) {
 		$this->luongCoBan = $luongCoBan;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLuongLaiXe(): int
+	{
+		return $this->luongLaiXe;
+	}
+
+	/**
+	 * @param int $luongLaiXe
+	 *
+	 * @return $this
+	 */
+	public function setLuongLaiXe(
+		int $luongLaiXe
+	) {
+		$this->luongLaiXe = $luongLaiXe;
 
 		return $this;
 	}
