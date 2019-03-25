@@ -50,11 +50,20 @@ body {
 	font-size: 12px;
 }
 
-.nhansu .title.doanhso {
+.nhansu .title.tongdoanhso {
 	font-size: 12px;
 }
 
-.nhansu .title.doanhso span {
+.nhansu .title.tongdoanhso span {
+	color: yellowgreen;
+	font-size: 12px;
+}
+
+.nhansu .title.tongnangsuat {
+	font-size: 12px;
+}
+
+.nhansu .title.tongnangsuat span {
 	color: yellowgreen;
 	font-size: 12px;
 }
