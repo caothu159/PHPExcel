@@ -8,7 +8,12 @@ class Data extends CI_Model
 	/**
 	 * @var bool|int
 	 */
-	private $time = false;
+	private $year = false;
+
+	/**
+	 * @var bool|int
+	 */
+	private $month = false;
 
 	/**
 	 * Data constructor.
@@ -26,8 +31,11 @@ class Data extends CI_Model
 	 */
 	public function fileContent($file)
 	{
-		if (!$this->time) {
-			return;
+		if (!$this->year) {
+			return array();
+		}
+		if (!$this->month) {
+			return array();
 		}
 		$path       = $this->getDir($file);
 		$excel      = IOFactory::load($path);
@@ -89,7 +97,6 @@ class Data extends CI_Model
 			return $this->fileContent('nangsuat.xlsx');
 		} catch (\PHPExcel_Reader_Exception $e) {
 			$this->debug($e);
-
 		}
 	}
 
@@ -173,7 +180,10 @@ class Data extends CI_Model
 	 */
 	private function getDir($file = '')
 	{
-		return FCPATH.'Data'.DIRECTORY_SEPARATOR.$this->time.DIRECTORY_SEPARATOR.$file;
+		return FCPATH.'Data'
+			   .DIRECTORY_SEPARATOR.$this->year
+			   .DIRECTORY_SEPARATOR.$this->month
+			   .DIRECTORY_SEPARATOR.$file;
 	}
 
 	/**
@@ -198,13 +208,13 @@ class Data extends CI_Model
 	}
 
 	/**
-	 * @param $time
+	 * @param $year
 	 *
 	 * @return $this
 	 */
-	public function setTime($time)
+	public function setYear($year)
 	{
-		$this->time = $time;
+		$this->year = $year;
 
 		return $this;
 	}
@@ -212,9 +222,29 @@ class Data extends CI_Model
 	/**
 	 * @return bool|int
 	 */
-	public function getTime()
+	public function getYear()
 	{
-		return $this->time;
+		return $this->year;
+	}
+
+	/**
+	 * @param $month
+	 *
+	 * @return $this
+	 */
+	public function setMonth($month)
+	{
+		$this->month = $month;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool|int
+	 */
+	public function getMonth()
+	{
+		return $this->month;
 	}
 
 	/**

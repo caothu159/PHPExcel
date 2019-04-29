@@ -31,27 +31,35 @@ class Salary extends CI_Controller
 	}
 
 	/**
-	 * @param $time
+	 * @param $year
+	 * @param $month
 	 */
-	public function time($time)
+	public function t($year = false, $month = false)
 	{
-		return $this->prepare($time);
+		return $this->prepare($year, $month);
 	}
 
 	/**
-	 * @param $time
+	 * @param $year
 	 */
-	private function prepareHtml($time = false)
-	{
+	private function prepareHtml(
+		$year = false,
+		$month = false
+	) {
 		$this->load->view('list', array(
-			'list' => $this->thoiGian->list(),
-			'time' => $time,
+			'years' => $this->thoiGian->years(),
+			'year'  => $year,
+			'month' => $month,
 		));
-		if (!$time) {
+		if (!$year) {
+			return;
+		}
+		if (!$month) {
 			return;
 		}
 		$this->nhanSu = $this->data
-			->setTime($time)
+			->setYear($year)
+			->setMonth($month)
 			->getNhanSu();
 
 		$nhanSu = array();
@@ -68,14 +76,15 @@ class Salary extends CI_Controller
 	}
 
 	/**
-	 * @param bool $time
+	 * @param bool $year
+	 * @param bool $month
 	 */
-	private function prepare($time = false)
+	private function prepare($year = false, $month = false)
 	{
 		$this->load->view('header', array(
-			'time' => $time,
+			'year' => $year,
 		));
-		$this->prepareHtml($time);
+		$this->prepareHtml($year, $month);
 		$this->load->view('footer');
 	}
 

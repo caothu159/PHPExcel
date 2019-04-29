@@ -8,10 +8,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
  */
 class Home extends CI_Controller
 {
-	/**
-	 * @var array
-	 */
-	private $nhanSu = array();
 
 	/**
 	 * Salary constructor.
@@ -33,63 +29,37 @@ class Home extends CI_Controller
 	}
 
 	/**
-	 * @param $time
+	 *
 	 */
-	public function time(
-		$time
-	) {
-		return $this->prepare($time);
-	}
-
-	/**
-	 * @param $time
-	 */
-	private function prepareHtml(
-		$time = false
-	) {
+	private function prepareHtml()
+	{
 		$this->load->view('list', array(
-			'list' => $this->thoiGian->list(),
-			'time' => $time,
+			'years' => $this->thoiGian->years(),
+			'year'  => false,
 		));
-		if (!$time) {
-			return;
-		}
-		$this->nhanSu = $this->data
-			->setTime($time)
-			->getNhanSu();
 
-		$nhanSu = array();
-		foreach ($this->nhanSu as $name => $ns) {
-			$ns->setCongNhat($this->data->chamcong())
-			   ->setTuyen($this->data->phancong())
-			   ->setNangSuat($this->data->nangsuat());
-			$nhanSu[$name] = $ns;
-		}
-
-		$this->load->view('salary', array(
-			'salary' => $nhanSu,
-		));
+		return;
 	}
 
 	/**
-	 * @param bool $time
+	 *
 	 */
-	private function prepare(
-		$time = false
-	) {
+	private function prepare()
+	{
 		$this->load->view('header', array(
-			'time' => $time,
+			'year' => false,
 		));
-		$this->prepareHtml($time);
+		$this->prepareHtml();
 		$this->load->view('footer');
+
+		return;
 	}
 
 	/**
 	 * @param $arg
 	 */
-	private function debug(
-		$arg
-	) {
+	private function debug($arg)
+	{
 //		echo '<pre>';
 //		print_r($arg);
 //		echo '</pre>';
