@@ -35,17 +35,5 @@
 				<?php endforeach; ?>
 			<?php endif; ?>
 		</table>
-		<div class="panel-body">
-
-			<form action="/upload/doupload/<?php echo $time; ?>" enctype="multipart/form-data" method="post">
-				<div class="form-group">
-					<label for="userfile">File input</label>
-					<input type="file" id="userfile" name="userfile">
-					<p class="help-block">Tải từng file lên.</p>
-				</div>
-
-				<button type="submit" class="btn btn-primary btn-xs">Tải lên</button>
-			</form>
-		</div>
 	</div>
 </div>
