@@ -10,31 +10,51 @@ class ThoiGian extends CI_Model
 	/**
 	 * @var bool|int
 	 */
-	private $time = false;
+	private $years = false;
+
+	/**
+	 * @var bool|int
+	 */
+	private $year = false;
+
+	/**
+	 * @var bool|int
+	 */
+	private $month = false;
 
 	/**
 	 * @param array $ignored
 	 *
 	 * @return array
 	 */
-	public function list($ignored = array('.', '..'))
+	public function years($ignored = array('.', '..'))
 	{
-		$files = array();
-		foreach (array_diff(scandir(self::DATADIR), $ignored) as $file) {
-			$files[$file] = '/salary/time'.DIRECTORY_SEPARATOR.$file;
+		if ($this->years) {
+			return $this->years ? : array();;
 		}
 
-		return $files ? : array();
+		$this->years = array();
+		foreach (array_diff(scandir(self::DATADIR), $ignored) as $year) {
+			$this->years[$year]         = array();
+			$this->years[$year]['path'] = '/salary/t'.DIRECTORY_SEPARATOR.$year;
+			foreach (array_diff(scandir(self::DATADIR.DIRECTORY_SEPARATOR.$year), $ignored) as $month) {
+				$this->years[$year][$month] = '/salary/t'
+											  .DIRECTORY_SEPARATOR.$year
+											  .DIRECTORY_SEPARATOR.$month;
+			}
+		}
+
+		return $this->years ? : array();
 	}
 
 	/**
-	 * @param $time
+	 * @param $year
 	 *
 	 * @return $this
 	 */
-	public function setTime($time)
+	public function setYear($year)
 	{
-		$this->time = $time;
+		$this->year = $year;
 
 		return $this;
 	}
@@ -42,9 +62,29 @@ class ThoiGian extends CI_Model
 	/**
 	 * @return bool|int
 	 */
-	public function getTime()
+	public function getYear()
 	{
-		return $this->time;
+		return $this->year;
+	}
+
+	/**
+	 * @param $month
+	 *
+	 * @return $this
+	 */
+	public function setMonth($month)
+	{
+		$this->month = $month;
+
+		return $this;
+	}
+
+	/**
+	 * @return bool|int
+	 */
+	public function getMonth()
+	{
+		return $this->month;
 	}
 
 }

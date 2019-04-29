@@ -16,6 +16,11 @@ class NhanSu extends CI_Model
 	private $luongCoBan = 3000;
 
 	/**
+	 * @var int
+	 */
+	private $luongLaiXe = 3000;
+
+	/**
 	 * @var array
 	 */
 	private $dataNangSuat = array();
@@ -246,6 +251,27 @@ class NhanSu extends CI_Model
 		int $luongCoBan
 	) {
 		$this->luongCoBan = $luongCoBan;
+
+		return $this;
+	}
+
+	/**
+	 * @return int
+	 */
+	public function getLuongLaiXe(): int
+	{
+		return $this->luongLaiXe;
+	}
+
+	/**
+	 * @param int $luongLaiXe
+	 *
+	 * @return $this
+	 */
+	public function setLuongLaiXe(
+		int $luongLaiXe
+	) {
+		$this->luongLaiXe = $luongLaiXe;
 
 		return $this;
 	}
