@@ -232,6 +232,9 @@ switch (ENVIRONMENT)
 	// Path to the front controller (this file) directory
 	define('FCPATH', dirname(__FILE__).DIRECTORY_SEPARATOR);
 
+	// Path to the Data directory
+	define('DTPATH', dirname(__FILE__, 2).DIRECTORY_SEPARATOR.'Data'.DIRECTORY_SEPARATOR);
+
 	// Name of the "system" directory
 	define('SYSDIR', basename(BASEPATH));
 
