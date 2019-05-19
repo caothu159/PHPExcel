@@ -180,8 +180,7 @@ class Data extends CI_Model
 	 */
 	private function getDir($file = '')
 	{
-		return FCPATH.'Data'
-			   .DIRECTORY_SEPARATOR.$this->year
+		return DTPATH.$this->year
 			   .DIRECTORY_SEPARATOR.$this->month
 			   .DIRECTORY_SEPARATOR.$file;
 	}

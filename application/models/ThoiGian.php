@@ -5,7 +5,7 @@
  */
 class ThoiGian extends CI_Model
 {
-	const DATADIR = 'Data';
+	const DATADIR = DTPATH;
 
 	/**
 	 * @var bool|int
