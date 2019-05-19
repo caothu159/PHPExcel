@@ -1,113 +1,116 @@
-body {
-	padding-top: 70px;
+/* top nav */
+
+.nav-hidden {
+    position: relative;
+    visibility: hidden;
 }
 
 .panel-title a {
-	display: block;
-	text-decoration: none;
+    display: block;
+    text-decoration: none;
 }
 
 .nhansu {
-	display: block;
-	margin-top: 20px;
+    display: block;
+    margin-top: 20px;
 }
 
 .nhansu .title {
-	border-bottom: 1px solid #eeeeee;
-	display: block;
-	line-height: 25px;
-	max-width: 350px;
-	padding-left: 15px;
-	width: 100%;
+    border-bottom: 1px solid #eeeeee;
+    display: block;
+    line-height: 25px;
+    max-width: 350px;
+    padding-left: 15px;
+    width: 100%;
 }
 
 .nhansu .title span {
-	display: block;
-	float: right;
-	font-size: 14px;
-	font-weight: 300;
-	text-align: right;
+    display: block;
+    float: right;
+    font-size: 14px;
+    font-weight: 300;
+    text-align: right;
 }
 
 .nhansu .title.cong span {
-	color: indianred;
+    color: indianred;
 }
 
 .nhansu .title.congnhat span {
-	color: blue;
+    color: blue;
 }
 
 .nhansu .title.nangsuat span {
-	color: blue;
+    color: blue;
 }
 
 .nhansu .title.hieusuat {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .nhansu .title.hieusuat span {
-	color: yellowgreen;
-	font-size: 12px;
+    color: yellowgreen;
+    font-size: 12px;
 }
 
 .nhansu .title.tongdoanhso {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .nhansu .title.tongdoanhso span {
-	color: yellowgreen;
-	font-size: 12px;
+    color: yellowgreen;
+    font-size: 12px;
 }
 
 .nhansu .title.tongnangsuat {
-	font-size: 12px;
+    font-size: 12px;
 }
 
 .nhansu .title.tongnangsuat span {
-	color: yellowgreen;
-	font-size: 12px;
+    color: yellowgreen;
+    font-size: 12px;
 }
 
 .nhansu .title.luong span {
-	color: orangered;
-	font-weight: 600;
+    color: orangered;
+    font-weight: 600;
 }
 
 .chitiet {
-	font-size: 12px;
-	padding-left: 15px;
-	padding-right: 15px;
+    font-size: 12px;
+    padding-left: 15px;
+    padding-right: 15px;
 }
 
 .chitiet .xe {
-	color: black;
-	display: block;
-	font-weight: 600;
+    color: black;
+    display: block;
+    font-weight: 600;
 }
 
 .chitiet .xe span {
-	color: blue;
-	font-weight: 300;
-	margin-left: 15px;
-	text-indent: 15px;
+    color: blue;
+    font-weight: 300;
+    margin-left: 15px;
+    text-indent: 15px;
 }
 
 .chitiet .cho-no {
-	display: block;
+    display: block;
 }
 
 .chitiet .cho-no span {
-	color: blue;
-	margin-left: 15px;
-	text-indent: 15px;
+    color: blue;
+    margin-left: 15px;
+    text-indent: 15px;
 }
 
 .chitiet .thu-no {
-	display: block;
+    display: block;
 }
 
 .chitiet .thu-no span {
-	color: blue;
-	margin-left: 15px;
-	text-indent: 15px;
+    color: blue;
+    margin-left: 15px;
+    text-indent: 15px;
 }
