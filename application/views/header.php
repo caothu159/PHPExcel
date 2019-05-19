@@ -28,7 +28,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 </head>
 <!-- !Header -->
 <body>
-<nav class="navbar navbar-default navbar-fixed-top">
+<nav class="navbar navbar-default navbar-fixed-top nav-display">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<a class="navbar-brand" href="<?php echo base_url(); ?>">
+				Trang chủ
+			</a>
+		</div>
+		<p class="navbar-text navbar-right">Trang thống kê sơ bộ lương nhân viên Điệp Xuân</p>
+	</div>
+</nav>
+<nav class="navbar navbar-default navbar-fixed-top nav-hidden">
 	<div class="container-fluid">
 		<div class="navbar-header">
 			<a class="navbar-brand" href="<?php echo base_url(); ?>">

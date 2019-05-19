@@ -41,8 +41,8 @@
 ############################################
 ## rewrite everything else to index.php
 
-    # RewriteRule .* index.php [L]
-	RewriteRule ^(.*)$ index.php/$1 [L,QSA]1
+    RewriteRule .* index.php [L]
+	# RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 
 </IfModule>
 
