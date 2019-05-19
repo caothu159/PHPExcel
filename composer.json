@@ -1,0 +1,15 @@
+{
+    "name": "diepxuan.com/luong",
+    "description": "salary for diepxuan",
+    "require": {
+        "kenjis/codeigniter-composer-installer": "^0.5.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Trần Ngọc Đức",
+            "email": "caothu91@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable"
+}
