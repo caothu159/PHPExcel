@@ -1,15 +1,10 @@
 {
-    "name": "diepxuan.com/luong",
-    "description": "salary for diepxuan",
-    "require": {
-        "kenjis/codeigniter-composer-installer": "^0.5.0"
-    },
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Trần Ngọc Đức",
-            "email": "caothu91@gmail.com"
-        }
-    ],
-    "minimum-stability": "stable"
+	"description" : "The CodeIgniter Application with Composer",
+	"require": {
+		"php": ">=5.3.2",
+		"codeigniter/framework": "3.1.*"
+	},
+	"require-dev": {
+		"mikey179/vfsStream": "1.1.*"
+	}
 }

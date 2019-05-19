@@ -7,10 +7,10 @@
     RewriteEngine on
 
 ############################################
-## you can put here your magento root folder
+## you can put here your root folder
 ## path relative to web root
 
-    #RewriteBase /magento/
+    # RewriteBase /public/
 
 ############################################
 ## workaround for HTTP authorization
@@ -37,11 +37,13 @@
     RewriteCond %{REQUEST_FILENAME} !-f
     RewriteCond %{REQUEST_FILENAME} !-d
     RewriteCond %{REQUEST_FILENAME} !-l
+	RewriteCond %{REQUEST_URI} !^public
 
 ############################################
 ## rewrite everything else to index.php
 
-    RewriteRule .* index.php [L]
+    RewriteRule ^(.*)$ public/$1 [L]
+    # RewriteRule .* index.php [L]
 	# RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 
 </IfModule>
