@@ -47,12 +47,3 @@
 	# RewriteRule ^(.*)$ index.php/$1 [L,QSA]
 
 </IfModule>
-
-
-############################################
-## Prevent character encoding issues from server overrides
-## If you still have problems, use the second line instead
-
-    # AddDefaultCharset Off
-    AddDefaultCharset UTF-8
-    AddType 'text/html; charset=UTF-8' html
