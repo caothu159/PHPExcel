@@ -49,8 +49,9 @@ class Home extends CI_Controller
      */
     private function debug($arg)
     {
-        //		echo '<pre>';
-//		print_r($arg);
-//		echo '</pre>';
+
+        //        echo '<pre>';
+        //        print_r($arg);
+        //        echo '</pre>';
     }
 }

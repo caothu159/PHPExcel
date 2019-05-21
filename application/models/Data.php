@@ -1,4 +1,5 @@
 <?php
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 /*
  * Copyright © 2019 Dxvn, Inc. All rights reserved.
