@@ -1,5 +1,10 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /*
 | -------------------------------------------------------------------------
@@ -51,4 +56,4 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 */
 $route['default_controller'] = 'home';
 $route['404_override'] = '';
-$route['translate_uri_dashes'] = FALSE;
+$route['translate_uri_dashes'] = false;

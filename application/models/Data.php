@@ -1,258 +1,258 @@
 <?php
 
-/**
- * Class Data
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
+
 class Data extends CI_Model
 {
-	/**
-	 * @var bool|int
-	 */
-	private $year = false;
+    /**
+     * @var bool|int
+     */
+    private $year = false;
 
-	/**
-	 * @var bool|int
-	 */
-	private $month = false;
+    /**
+     * @var bool|int
+     */
+    private $month = false;
 
-	/**
-	 * Data constructor.
-	 */
-	public function __construct()
-	{
-		$this->load->library('PHPExcel/IOFactory');
-	}
+    /**
+     * Data constructor.
+     */
+    public function __construct()
+    {
+        $this->load->library('PHPExcel/IOFactory');
+    }
 
-	/**
-	 * @param $file
-	 *
-	 * @return array|void
-	 * @throws \PHPExcel_Reader_Exception
-	 */
-	public function fileContent($file)
-	{
-		if (!$this->year) {
-			return array();
-		}
-		if (!$this->month) {
-			return array();
-		}
-		$path       = $this->getDir($file);
-		$excel      = IOFactory::load($path);
-		$sheet      = $excel->getActiveSheet();
-		$highestRow = $sheet->getHighestRow();
-		$isHeader   = true;
-		$content    = array();
-		$cols       = array();
+    /**
+     * @param $file
+     *
+     * @throws \PHPExcel_Reader_Exception
+     *
+     * @return array|void
+     */
+    public function fileContent($file)
+    {
+        if (!$this->year) {
+            return [];
+        }
+        if (!$this->month) {
+            return [];
+        }
+        $path = $this->getDir($file);
+        $excel = IOFactory::load($path);
+        $sheet = $excel->getActiveSheet();
+        $highestRow = $sheet->getHighestRow();
+        $isHeader = true;
+        $content = [];
+        $cols = [];
 
-		for ($row = 1; $row <= $highestRow; $row++) {
+        for ($row = 1; $row <= $highestRow; $row++) {
+            $rowData = $this->rowContent($sheet, $row);
+            foreach ($rowData as $cells) {
+                foreach ($cells as $cellRef => $cellData) {
+                    if ($cellRef == 'A') {
+                        continue;
+                    }
+                    $cellData = $this->contentRepair($cellData);
 
-			$rowData = $this->rowContent($sheet, $row);
-			foreach ($rowData as $cells) {
+                    if (!$isHeader) {
+                        $content[$cells['A']][$cols[$cellRef]] = $cellData;
+                    } else {
+                        $cols[$cellRef] = $cellData;
+                    }
+                }
 
-				foreach ($cells as $cellRef => $cellData) {
-					if ($cellRef == 'A') {
-						continue;
-					}
-					$cellData = $this->contentRepair($cellData);
+                $isHeader = false;
+            }
+        }
 
-					if (!$isHeader) {
-						$content[$cells['A']][$cols[$cellRef]] = $cellData;
-					} else {
-						$cols[$cellRef] = $cellData;
-					}
-				}
+        return $content;
+    }
 
-				$isHeader = false;
-			}
-		}
+    /**
+     * @return array
+     */
+    public function getNhanSu()
+    {
+        $lstNs = [];
 
-		return $content;
-	}
+        try {
+            foreach ($this->fileContent('nhanvien.xlsx') as $name => $nv) {
+                $lstNs[$name] = new NhanSu($name, $nv);
+            }
+        } catch (\PHPExcel_Reader_Exception $e) {
+            $this->debug($e);
+        }
 
-	/**
-	 * @return array
-	 */
-	public function getNhanSu()
-	{
-		$lstNs = array();
+        return $lstNs;
+    }
 
-		try {
-			foreach ($this->fileContent('nhanvien.xlsx') as $name => $nv) {
-				$lstNs[$name] = new NhanSu($name, $nv);
-			}
-		} catch (\PHPExcel_Reader_Exception $e) {
-			$this->debug($e);
-		}
+    /**
+     * @return array
+     */
+    public function nangsuat()
+    {
+        try {
+            return $this->fileContent('nangsuat.xlsx');
+        } catch (\PHPExcel_Reader_Exception $e) {
+            $this->debug($e);
+        }
+    }
 
-		return $lstNs;
-	}
+    /**
+     * @return array
+     */
+    public function chamcong()
+    {
+        try {
+            return $this->fileContent('chamcong.xlsx');
+        } catch (\PHPExcel_Reader_Exception $e) {
+            $this->debug($e);
+        }
+    }
 
-	/**
-	 * @return array
-	 */
-	public function nangsuat()
-	{
-		try {
-			return $this->fileContent('nangsuat.xlsx');
-		} catch (\PHPExcel_Reader_Exception $e) {
-			$this->debug($e);
-		}
-	}
+    /*
+     * @return array
+     */
+    public function phancong()
+    {
+        try {
+            return $this->fileContent('phancong.xlsx');
+        } catch (\PHPExcel_Reader_Exception $e) {
+            return [];
+        }
+    }
 
-	/**
-	 * @return array
-	 */
-	public function chamcong()
-	{
-		try {
-			return $this->fileContent('chamcong.xlsx');
-		} catch (\PHPExcel_Reader_Exception $e) {
-			$this->debug($e);
-		}
-	}
+    /**
+     * @param $sheet
+     * @param $row
+     *
+     * @return mixed
+     */
+    private function rowContent($sheet, $row)
+    {
+        $highestColumn = $this->getHighestColumn($sheet);
 
-	/*
-	 * @return array
-	 */
-	public function phancong()
-	{
-		try {
-			return $this->fileContent('phancong.xlsx');
-		} catch (\PHPExcel_Reader_Exception $e) {
-			return array();
-		}
-	}
+        return $sheet->rangeToArray(
+            'A'.$row.':'.$highestColumn.$row,
+            null,
+            true,
+            false,
+            true
+        );
+    }
 
-	/**
-	 * @param $sheet
-	 * @param $row
-	 *
-	 * @return mixed
-	 */
-	private function rowContent($sheet, $row)
-	{
-		$highestColumn = $this->getHighestColumn($sheet);
+    /**
+     * @param $sheet
+     *
+     * @return int|string
+     */
+    private function getHighestColumn($sheet)
+    {
+        $highestColumn = $sheet->getHighestColumn();
+        $headerRow = 1;
+        $rowsData = $sheet->rangeToArray('A'.$headerRow.':'.$highestColumn.$headerRow,
+                                              null,
+                                              true,
+                                              false,
+                                              true);
+        foreach ($rowsData as $rowData) {
+            foreach ($rowData as $cellRef => $cellOriginData) {
+                $cellData = $this->contentRepair($cellOriginData);
+                if (empty($cellData)
+                    || is_null($cellData)
+                    || $cellData == ''
+                ) {
+                    continue;
+                }
+                $highestColumn = $cellRef;
+            }
+        }
 
-		return $sheet->rangeToArray(
-			'A'.$row.':'.$highestColumn.$row,
-			null,
-			true,
-			false,
-			true
-		);
-	}
+        return $highestColumn;
+    }
 
-	/**
-	 * @param $sheet
-	 *
-	 * @return int|string
-	 */
-	private function getHighestColumn($sheet)
-	{
-		$highestColumn = $sheet->getHighestColumn();
-		$headerRow     = 1;
-		$rowsData      = $sheet->rangeToArray('A'.$headerRow.':'.$highestColumn.$headerRow,
-											  null,
-											  true,
-											  false,
-											  true);
-		foreach ($rowsData as $rowData) {
-			foreach ($rowData as $cellRef => $cellOriginData) {
-				$cellData = $this->contentRepair($cellOriginData);
-				if (empty($cellData)
-					|| is_null($cellData)
-					|| $cellData == ''
-				) {
-					continue;
-				}
-				$highestColumn = $cellRef;
-			}
-		}
+    /**
+     * @param string $file
+     *
+     * @return string
+     */
+    private function getDir($file = '')
+    {
+        return DTPATH.$this->year
+               .DIRECTORY_SEPARATOR.$this->month
+               .DIRECTORY_SEPARATOR.$file;
+    }
 
-		return $highestColumn;
-	}
+    /**
+     * @param string $content
+     *
+     * @return array|null|string|string[]
+     */
+    private function contentRepair($content = '')
+    {
+        $content = explode(PHP_EOL, trim($content));
+        $content = array_filter($content, function ($value) {
+            return trim($value) !== '';
+        });
+        $content = implode(', ', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F]/', '', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F]/u', '', $content);
+        $content = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $content);
+        $content = nl2br($content);
 
-	/**
-	 * @param string $file
-	 *
-	 * @return string
-	 */
-	private function getDir($file = '')
-	{
-		return DTPATH.$this->year
-			   .DIRECTORY_SEPARATOR.$this->month
-			   .DIRECTORY_SEPARATOR.$file;
-	}
+        return $content;
+    }
 
-	/**
-	 * @param string $content
-	 *
-	 * @return array|null|string|string[]
-	 */
-	private function contentRepair($content = '')
-	{
-		$content = explode(PHP_EOL, trim($content));
-		$content = array_filter($content, function ($value) {
-			return trim($value) !== '';
-		});
-		$content = implode(', ', $content);
-		$content = preg_replace('/[\x00-\x1F\x7F-\xFF]/', '', $content);
-		$content = preg_replace('/[\x00-\x1F\x7F]/', '', $content);
-		$content = preg_replace('/[\x00-\x1F\x7F]/u', '', $content);
-		$content = preg_replace('/[\x00-\x1F\x7F\xA0]/u', '', $content);
-		$content = nl2br($content);
+    /**
+     * @param $year
+     *
+     * @return $this
+     */
+    public function setYear($year)
+    {
+        $this->year = $year;
 
-		return $content;
-	}
+        return $this;
+    }
 
-	/**
-	 * @param $year
-	 *
-	 * @return $this
-	 */
-	public function setYear($year)
-	{
-		$this->year = $year;
+    /**
+     * @return bool|int
+     */
+    public function getYear()
+    {
+        return $this->year;
+    }
 
-		return $this;
-	}
+    /**
+     * @param $month
+     *
+     * @return $this
+     */
+    public function setMonth($month)
+    {
+        $this->month = $month;
 
-	/**
-	 * @return bool|int
-	 */
-	public function getYear()
-	{
-		return $this->year;
-	}
+        return $this;
+    }
 
-	/**
-	 * @param $month
-	 *
-	 * @return $this
-	 */
-	public function setMonth($month)
-	{
-		$this->month = $month;
+    /**
+     * @return bool|int
+     */
+    public function getMonth()
+    {
+        return $this->month;
+    }
 
-		return $this;
-	}
-
-	/**
-	 * @return bool|int
-	 */
-	public function getMonth()
-	{
-		return $this->month;
-	}
-
-	/**
-	 * @param $arg
-	 */
-	private function debug($arg)
-	{
-//		echo '<pre>';
+    /**
+     * @param $arg
+     */
+    private function debug($arg)
+    {
+        //		echo '<pre>';
 //		print_r($arg);
 //		echo '</pre>';
-	}
+    }
 }

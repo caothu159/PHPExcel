@@ -1,100 +1,102 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Class Salary
+ * Class Salary.
  */
 class Salary extends CI_Controller
 {
-	/**
-	 * @var array
-	 */
-	private $nhanSu = array();
+    /**
+     * @var array
+     */
+    private $nhanSu = [];
 
-	/**
-	 * Salary constructor.
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+    /**
+     * Salary constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-		$this->load->model('data');
-		$this->load->model('thoiGian');
-	}
+        $this->load->model('data');
+        $this->load->model('thoiGian');
+    }
 
-	/**
-	 *
-	 */
-	public function index()
-	{
-		return $this->prepare();
-	}
+    public function index()
+    {
+        return $this->prepare();
+    }
 
-	/**
-	 * @param $year
-	 * @param $month
-	 */
-	public function t($year = false, $month = false)
-	{
-		return $this->prepare($year, $month);
-	}
+    /**
+     * @param $year
+     * @param $month
+     */
+    public function t($year = false, $month = false)
+    {
+        return $this->prepare($year, $month);
+    }
 
-	/**
-	 * @param $year
-	 */
-	private function prepareHtml(
-		$year = false,
-		$month = false
-	) {
-		$this->load->view('list', array(
-			'years' => $this->thoiGian->years(),
-			'year'  => $year,
-			'month' => $month,
-		));
-		if (!$year) {
-			return;
-		}
-		if (!$month) {
-			return;
-		}
-		$this->nhanSu = $this->data
-			->setYear($year)
-			->setMonth($month)
-			->getNhanSu();
+    /**
+     * @param $year
+     */
+    private function prepareHtml(
+        $year = false,
+        $month = false
+    ) {
+        $this->load->view('list', [
+            'years' => $this->thoiGian->years(),
+            'year'  => $year,
+            'month' => $month,
+        ]);
+        if (!$year) {
+            return;
+        }
+        if (!$month) {
+            return;
+        }
+        $this->nhanSu = $this->data
+            ->setYear($year)
+            ->setMonth($month)
+            ->getNhanSu();
 
-		$nhanSu = array();
-		foreach ($this->nhanSu as $name => $ns) {
-			$ns->setCongNhat($this->data->chamcong())
-			   ->setTuyen($this->data->phancong())
-			   ->setNangSuat($this->data->nangsuat());
-			$nhanSu[$name] = $ns;
-		}
+        $nhanSu = [];
+        foreach ($this->nhanSu as $name => $ns) {
+            $ns->setCongNhat($this->data->chamcong())
+               ->setTuyen($this->data->phancong())
+               ->setNangSuat($this->data->nangsuat());
+            $nhanSu[$name] = $ns;
+        }
 
-		$this->load->view('salary', array(
-			'salary' => $nhanSu,
-		));
-	}
+        $this->load->view('salary', [
+            'salary' => $nhanSu,
+        ]);
+    }
 
-	/**
-	 * @param bool $year
-	 * @param bool $month
-	 */
-	private function prepare($year = false, $month = false)
-	{
-		$this->load->view('header', array(
-			'year' => $year,
-		));
-		$this->prepareHtml($year, $month);
-		$this->load->view('footer');
-	}
+    /**
+     * @param bool $year
+     * @param bool $month
+     */
+    private function prepare($year = false, $month = false)
+    {
+        $this->load->view('header', [
+            'year' => $year,
+        ]);
+        $this->prepareHtml($year, $month);
+        $this->load->view('footer');
+    }
 
-	/**
-	 * @param $arg
-	 */
-	private function debug($arg)
-	{
-//		echo '<pre>';
+    /**
+     * @param $arg
+     */
+    private function debug($arg)
+    {
+        //		echo '<pre>';
 //		print_r($arg);
 //		echo '</pre>';
-	}
+    }
 }
