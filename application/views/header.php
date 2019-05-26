@@ -1,10 +1,10 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <html lang="en">
 <!-- Header -->
 <head>
-	<title>Lương <?php echo $year ? "năm $year" : ""; ?></title>
+	<title>Lương <?php echo $year ? "năm $year" : ''; ?></title>
 	<meta charset="utf-8">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">

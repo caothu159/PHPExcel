@@ -1,15 +1,13 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: DucTn
- * Date: 10/15/2018
- * Time: 6:10 PM
+
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
  */
 
 class NhanVien extends CI_Model
 {
-	public function __construct()
-	{
-		$this->load->database();
-	}
+    public function __construct()
+    {
+        $this->load->database();
+    }
 }

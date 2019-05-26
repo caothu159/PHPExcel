@@ -11,11 +11,11 @@
 			<?php echo number_format($nhansu->getNangSuat()); ?></span></div>
 	<div class="title luong">Lương: <span>
 			<?php echo number_format($nhansu->getCongNhat()
-									 + $nhansu->getNangSuat()); ?></span></div>
+                                     + $nhansu->getNangSuat()); ?></span></div>
 	<div class="title hieusuat">Hiệu Suất: <span>
 			<?php echo number_format(
-				max($nhansu->getHieuSuat(), $nhansu->getCongNhat() + $nhansu->getNangSuat())
-			); ?></span></div>
+                max($nhansu->getHieuSuat(), $nhansu->getCongNhat() + $nhansu->getNangSuat())
+            ); ?></span></div>
 	<div class="title tongdoanhso">Tổng doanh Số: <span>
 			<?php echo number_format($nhansu->getDoanhSo()); ?></span></div>
 	<div class="title tongnangsuat">Tổng năng suất: <span>

@@ -18,13 +18,13 @@
 				<span class="cho-no">Cho nợ: <span><?php echo $ns['cho no']; ?></span></span>
 				<span class="thu-no">Thu nợ: <span><?php echo $ns['thu no']; ?></span></span>
 			</td>
-			<!--			<td>--><?php //echo $ns['nang suat xe']; ?><!--</td>-->
-			<!--			<td>--><?php //echo $ns['cho no']; ?><!--</td>-->
-			<!--			<td>--><?php //echo $ns['thu no']; ?><!--</td>-->
-			<td><?php echo number_format((float)$ns['ti le'], 2, '.', ''); ?></td>
-			<td><?php echo number_format((float)$ns['nang suat'], 2, '.', ''); ?></td>
+			<!--			<td>--><?php //echo $ns['nang suat xe'];?><!--</td>-->
+			<!--			<td>--><?php //echo $ns['cho no'];?><!--</td>-->
+			<!--			<td>--><?php //echo $ns['thu no'];?><!--</td>-->
+			<td><?php echo number_format((float) $ns['ti le'], 2, '.', ''); ?></td>
+			<td><?php echo number_format((float) $ns['nang suat'], 2, '.', ''); ?></td>
 			<td><?php echo $ns['ti suat']; ?></td>
-			<td><?php echo number_format((float)$ns['luong'], 2, '.', ''); ?></td>
+			<td><?php echo number_format((float) $ns['luong'], 2, '.', ''); ?></td>
 		</tr>
 	<?php endforeach; ?>
 </table>

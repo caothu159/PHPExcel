@@ -23,11 +23,11 @@
 					 aria-labelledby="<?php echo implode('-', explode(' ', strtolower($name))); ?>">
 					<div class="panel-body">
 						<div class="nhansu">
-							<?php $this->load->view('salary/nhansu', array('nhansu' => $ns)); ?>
+							<?php $this->load->view('salary/nhansu', ['nhansu' => $ns]); ?>
 						</div>
 					</div>
 					<?php if ($ns->getNangSuat() > 0): ?>
-						<?php $this->load->view('salary/chitiet', array('nhansu' => $ns)); ?>
+						<?php $this->load->view('salary/chitiet', ['nhansu' => $ns]); ?>
 					<?php endif; ?>
 				</div>
 			</div>

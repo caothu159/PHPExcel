@@ -4,7 +4,7 @@
 		<table class="table">
 			<?php if ($year): ?>
 				<?php foreach ($years[$year] as $mNum => $mModel) : ?>
-					<?php if ($mNum == "path"): ?>
+					<?php if ($mNum == 'path'): ?>
 						<?php continue; ?>
 					<?php endif; ?>
 					<tr>

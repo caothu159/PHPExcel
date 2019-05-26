@@ -1,66 +1,56 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
 
+/*
+ * Copyright © 2019 Dxvn, Inc. All rights reserved.
+ */
+
+defined('BASEPATH') or exit('No direct script access allowed');
 
 /**
- * Class Salary
+ * Class Salary.
  */
 class Home extends CI_Controller
 {
+    /**
+     * Salary constructor.
+     */
+    public function __construct()
+    {
+        parent::__construct();
 
-	/**
-	 * Salary constructor.
-	 */
-	public function __construct()
-	{
-		parent::__construct();
+        $this->load->model('data');
+        $this->load->model('thoiGian');
+    }
 
-		$this->load->model('data');
-		$this->load->model('thoiGian');
-	}
+    public function index()
+    {
+        return $this->prepare();
+    }
 
-	/**
-	 *
-	 */
-	public function index()
-	{
-		return $this->prepare();
-	}
+    private function prepareHtml()
+    {
+        $this->load->view('list', [
+            'years' => $this->thoiGian->years(),
+            'year'  => false,
+        ]);
+    }
 
-	/**
-	 *
-	 */
-	private function prepareHtml()
-	{
-		$this->load->view('list', array(
-			'years' => $this->thoiGian->years(),
-			'year'  => false,
-		));
+    private function prepare()
+    {
+        $this->load->view('header', [
+            'year' => false,
+        ]);
+        $this->prepareHtml();
+        $this->load->view('footer');
+    }
 
-		return;
-	}
-
-	/**
-	 *
-	 */
-	private function prepare()
-	{
-		$this->load->view('header', array(
-			'year' => false,
-		));
-		$this->prepareHtml();
-		$this->load->view('footer');
-
-		return;
-	}
-
-	/**
-	 * @param $arg
-	 */
-	private function debug($arg)
-	{
-//		echo '<pre>';
+    /**
+     * @param $arg
+     */
+    private function debug($arg)
+    {
+        //		echo '<pre>';
 //		print_r($arg);
 //		echo '</pre>';
-	}
+    }
 }
